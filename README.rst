@@ -28,6 +28,10 @@ We are grateful to all its collaborators.
 
 *Technology builds on technology*
 
+Documentation
+=============
+
+Check the documentation at http://www.meteo.mcgill.ca/~aperez/SkewTplus/
 
 Dependencies
 ============
@@ -51,16 +55,6 @@ To-Do List
 * Hodographs? Anyone? 
 
 
-Contributors
-============
-* Ross Bunn from Monash University is actively developing and finding all my 
-  warty bugs.
-* Gokhan Sever (North Carolina) is a keen user and has been encouraging me 
-  to add more stuff. It's thanks to him that I have finally implemented the 
-  CAPE routines.
-* Simon Caine.
-* Hamish Ramsay (Monash) has promised to at least think about adding some 
-  extra diagnostics.
-* Holger Wolff as tester
+
 
 
