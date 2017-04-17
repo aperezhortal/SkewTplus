@@ -9,9 +9,9 @@ and parallelization purposes
 '''
 from __future__ import division, print_function
 
-from numpy import arctan, min, exp, log, where, logical_or
+from numpy import arctan, min, exp, log, where
 import numpy
-from numpy.ma.core import masked_array, getmaskarray
+from numpy.ma.core import masked_array
 
 from SkewTplus._thermodynamics import _parcelAnalysis4D, _parcelAnalysis3D, \
     _parcelAnalysis1D, _getLCL, _liftParcel, _moistAscent

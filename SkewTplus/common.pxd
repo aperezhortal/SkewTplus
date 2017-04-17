@@ -3,7 +3,7 @@
 # cython: cdivision=True
 # cython: embedsignature=True
 """
-Common defnitions and functions  
+Common definitions and functions  
 """
 
 __author__ = "Andres Perez Hortal"
