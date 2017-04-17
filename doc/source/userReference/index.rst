@@ -17,7 +17,8 @@ The User Reference has the following chapters
     
     firstSteps
     profilePlotting
-    
+    parcelAnalysis
+    wrfOutputCAPE
 
 
 
