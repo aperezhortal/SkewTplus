@@ -58,6 +58,7 @@ The SkewTplus package need the following dependencies
 * libgcc
 
 For running the examples:
+
 * Basemap
 * hdf4
 * netCDF4
@@ -65,10 +66,6 @@ For running the examples:
 Installing SkewT
 ================
 
-If wxPython Phoenix  it's not installed, to install it manually using pip
-( could take several minutes)::
-    
-    pip install --upgrade --pre -f https://wxpython.org/Phoenix/snapshot-builds/ wxPython_Phoenix
 
 If all the dependencies are installed, to install the SkewTplus package
 you can download the tarball from the github repository and run::

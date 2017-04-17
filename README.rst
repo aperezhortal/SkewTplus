@@ -44,10 +44,24 @@ The SkewTplus package need the following dependencies
 * libgcc
 
 For running the examples:
+
 * Basemap
 * hdf4
 * netCDF4
 
+
+Installing SkewT
+================
+
+
+If all the dependencies are installed, to install the SkewTplus package
+you can download the tarball from the github repository and run::
+
+    python setup.py install
+
+If you want to put it somewhere different than your system files, you can do::
+    
+    python setup.py install --prefix=/path/to/local/dir
 
 To-Do List
 ==========
