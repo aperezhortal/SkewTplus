@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fist-Steps &#8212; SkewTplus  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Profile Plotting" href="profilePlotting.html" />
+    <link rel="prev" title="User Reference" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="profilePlotting.html" title="Profile Plotting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="User Reference"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">SkewTplus  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User Reference</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fist-steps">
+<span id="firststeps"></span><h1>Fist-Steps<a class="headerlink" href="#fist-steps" title="Permalink to this headline">¶</a></h1>
+<p>This chapter offer a quick overview of the main package capabilities:
+To read a sounding from a txt file and create a quick SkewT diagram.</p>
+<div class="section" id="sounding-data">
+<h2>Sounding Data<a class="headerlink" href="#sounding-data" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to get some sounding data is to visit the University of
+Wyoming&#8217;s website:</p>
+<p><a class="reference external" href="http://weather.uwyo.edu/upperair/sounding.html">http://weather.uwyo.edu/upperair/sounding.html</a></p>
+<p>To get some sounding data, follow the link and find the date, and location
+you are interested in, view the data as a text file and just save the file
+to your system. If you want to get loads of data please be considerate about
+the way you go about doing this! (Lots of wget requests makes the server
+administrators unhappy).</p>
+<p>You can also pass your own data to SkewT by writing a text file in
+<strong>identical</strong> format to the University of Wyoming files, which are
+constant-width columns. Here&#8217;s a sample of the first few lines of one of the
+bundled examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">94975</span> <span class="n">YMHB</span> <span class="n">Hobart</span> <span class="n">Airport</span> <span class="n">Observations</span> <span class="n">at</span> <span class="mi">00</span><span class="n">Z</span> <span class="mi">02</span> <span class="n">Jul</span> <span class="mi">2013</span>
+
+<span class="o">-----------------------------------------------------------------------------</span>
+   <span class="n">PRES</span>   <span class="n">HGHT</span>   <span class="n">TEMP</span>   <span class="n">DWPT</span>   <span class="n">RELH</span>   <span class="n">MIXR</span>   <span class="n">DRCT</span>   <span class="n">SKNT</span>   <span class="n">THTA</span>   <span class="n">THTE</span>   <span class="n">THTV</span>
+    <span class="n">hPa</span>     <span class="n">m</span>      <span class="n">C</span>      <span class="n">C</span>      <span class="o">%</span>    <span class="n">g</span><span class="o">/</span><span class="n">kg</span>    <span class="n">deg</span>   <span class="n">knot</span>     <span class="n">K</span>      <span class="n">K</span>      <span class="n">K</span>
+<span class="o">-----------------------------------------------------------------------------</span>
+ <span class="mf">1004.0</span>     <span class="mi">27</span>   <span class="mf">12.0</span>   <span class="mf">10.2</span>     <span class="mi">89</span>   <span class="mf">7.84</span>    <span class="mi">330</span>     <span class="mi">14</span>  <span class="mf">284.8</span>  <span class="mf">306.7</span>  <span class="mf">286.2</span>
+ <span class="mf">1000.0</span>     <span class="mi">56</span>   <span class="mf">12.4</span>   <span class="mf">10.3</span>     <span class="mi">87</span>   <span class="mf">7.92</span>    <span class="mi">325</span>     <span class="mi">16</span>  <span class="mf">285.6</span>  <span class="mf">307.8</span>  <span class="mf">286.9</span>
+  <span class="mf">993.0</span>    <span class="mi">115</span>   <span class="mf">12.8</span>    <span class="mf">9.7</span>     <span class="mi">81</span>   <span class="mf">7.66</span>    <span class="mi">311</span>     <span class="mi">22</span>  <span class="mf">286.5</span>  <span class="mf">308.1</span>  <span class="mf">287.9</span>
+</pre></div>
+</div>
+<p>Alternatively you can create a dictionary with the column headers as keys
+and the data as 1D python arrays (preferably use <code class="docutils literal"><span class="pre">ma.masked_array</span></code>).
+There&#8217;s more about this under the &#8220;Running SkewT&#8221; section below.</p>
+</div>
+<div class="section" id="fist-steps-using-skewtplus">
+<h2>Fist steps using SkewTplus<a class="headerlink" href="#fist-steps-using-skewtplus" title="Permalink to this headline">¶</a></h2>
+<p>From now on, it&#8217;s assumed that the package is installed and the current working
+directory is the <em>examples</em> one, included in this package.</p>
+<p>To read a sounding from a txt file and create a quick plot using the default
+parameters we only have to do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">SkewTplus.sounding</span> <span class="k">import</span> <span class="n">Sounding</span>
+
+<span class="c1">#Load the sounding data</span>
+<span class="n">mySounding</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">(</span><span class="s2">&quot;./exampleSounding.txt&quot;</span><span class="p">)</span>
+<span class="n">mySounding</span><span class="o">.</span><span class="n">quickPlot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The resulting plot will look like this:</p>
+<img alt="../_images/soundingQuickView.png" src="../_images/soundingQuickView.png" />
+<p>Now we can do the same thing, but with more control over the Figure:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Import the new figure class</span>
+<span class="kn">from</span> <span class="nn">SkewTplus.skewT</span> <span class="k">import</span> <span class="n">figure</span>
+
+<span class="kn">from</span> <span class="nn">SkewTplus.sounding</span> <span class="k">import</span> <span class="n">sounding</span>
+
+
+<span class="c1">#Load the sounding data</span>
+<span class="n">mySounding</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">(</span><span class="s2">&quot;./exampleSounding.txt&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create a Figure Manager</span>
+<span class="n">mySkewT_Figure</span> <span class="o">=</span> <span class="n">figure</span><span class="p">()</span>
+
+<span class="c1"># Add an Skew-T axes to the Figure</span>
+<span class="n">mySkewT_Axes</span> <span class="o">=</span> <span class="n">mySkewT_Figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;skewx&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># Extract the data from the Sounding</span>
+<span class="n">pressure</span> <span class="o">=</span> <span class="n">mySounding</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;pres&#39;</span><span class="p">]</span>
+<span class="n">temperature</span> <span class="o">=</span>  <span class="n">mySounding</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
+<span class="n">dewPointTemperature</span> <span class="o">=</span> <span class="n">mySounding</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;dwpt&#39;</span><span class="p">]</span>
+
+<span class="c1"># Add a profile to the Skew-T diagram</span>
+<span class="c1">#  method=0 -&gt; Most unstable parcel</span>
+<span class="c1">#  diagnostics -&gt; add a text box in the Figure with the parcel analysis results</span>
+<span class="n">mySkewT_Axes</span><span class="o">.</span><span class="n">addProfile</span><span class="p">(</span><span class="n">pressure</span><span class="p">,</span><span class="n">temperature</span><span class="p">,</span> <span class="n">dewPointTemperature</span> <span class="p">,</span>
+                            <span class="n">hPa</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diagnostics</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Show the figure</span>
+<span class="n">mySkewT_Figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/soundingPlot.png" src="../_images/soundingPlot.png" />
+<p>Lets now complicate the things a little bit and show one of the new capabilities
+of the package. Let suppose that we want to compare two soundings, with the
+parcel analysis, and plot them side to side:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#Load the sounding data</span>
+<span class="n">mySounding1</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">(</span><span class="s2">&quot;./bna_day1.txt&quot;</span><span class="p">)</span>
+<span class="n">mySounding2</span> <span class="o">=</span> <span class="n">sounding</span><span class="p">(</span><span class="s2">&quot;./bna_day2.txt&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create a Figure Manager with a suitable size for both plots</span>
+<span class="n">mySkewT_Figure</span> <span class="o">=</span> <span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># Now we want to create two axes side to side</span>
+
+<span class="c1"># Add the first Skew-T axes to the Figure</span>
+<span class="n">mySkewT_Axes1</span> <span class="o">=</span> <span class="n">mySkewT_Figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;skewx&#39;</span><span class="p">,</span><span class="n">tmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">)</span>
+
+
+<span class="c1"># Extract the data from the Sounding</span>
+<span class="n">pressure</span> <span class="o">=</span> <span class="n">mySounding1</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;pres&#39;</span><span class="p">]</span>
+<span class="n">temperature</span> <span class="o">=</span>  <span class="n">mySounding1</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
+<span class="n">dewPointTemperature</span> <span class="o">=</span> <span class="n">mySounding1</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;dwpt&#39;</span><span class="p">]</span>
+
+<span class="c1"># Add a profile to the Skew-T diagram</span>
+<span class="n">mySkewT_Axes1</span><span class="o">.</span><span class="n">addProfile</span><span class="p">(</span><span class="n">pressure</span><span class="p">,</span><span class="n">temperature</span><span class="p">,</span> <span class="n">dewPointTemperature</span> <span class="p">,</span>
+                        <span class="n">hPa</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diagnostics</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="n">mySkewT_Axes1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Day 1 Sounding&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add the second Skew-T axes to the Figure</span>
+<span class="n">mySkewT_Axes2</span> <span class="o">=</span> <span class="n">mySkewT_Figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;skewx&#39;</span><span class="p">,</span><span class="n">tmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="c1"># Extract the data from the Sounding</span>
+<span class="n">pressure</span> <span class="o">=</span> <span class="n">mySounding2</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;pres&#39;</span><span class="p">]</span>
+<span class="n">temperature</span> <span class="o">=</span>  <span class="n">mySounding2</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
+<span class="n">dewPointTemperature</span> <span class="o">=</span> <span class="n">mySounding2</span><span class="o">.</span><span class="n">soundingdata</span><span class="p">[</span><span class="s1">&#39;dwpt&#39;</span><span class="p">]</span>
+
+<span class="c1"># Add a profile to the Skew-T diagram</span>
+<span class="n">mySkewT_Axes2</span><span class="o">.</span><span class="n">addProfile</span><span class="p">(</span><span class="n">pressure</span><span class="p">,</span><span class="n">temperature</span><span class="p">,</span> <span class="n">dewPointTemperature</span> <span class="p">,</span>
+                        <span class="n">hPa</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">celsius</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">diagnostics</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">mySkewT_Axes2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Day 2 Sounding&quot;</span><span class="p">)</span>
+
+<span class="c1"># Show the figure</span>
+<span class="n">mySkewT_Figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/twoSoundingsPlots.png" src="../_images/twoSoundingsPlots.png" />
+<p>The profile plotting capabilities are described in greater detail in the next chapter:
+<a class="reference internal" href="profilePlotting.html#profileplotting"><span class="std std-ref">Profile Plotting</span></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Fist-Steps</a><ul>
+<li><a class="reference internal" href="#sounding-data">Sounding Data</a></li>
+<li><a class="reference internal" href="#fist-steps-using-skewtplus">Fist steps using SkewTplus</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">User Reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="profilePlotting.html"
+                        title="next chapter">Profile Plotting</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/userReference/firstSteps.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="profilePlotting.html" title="Profile Plotting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="User Reference"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">SkewTplus  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >User Reference</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Andres Perez Hortal.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.4.
+    </div>
+  </body>
+</html>
