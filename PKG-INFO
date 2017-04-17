@@ -1,0 +1,29 @@
+Metadata-Version: 1.0
+Name: pySkewT
+Version: 1.0.0
+Summary: Extension of matplotlib to create skewT plots and analyses from atmospheric vertical profile
+Home-page: http://pypi.python.org/pypi/SkewT/
+Author: Andrés A. Pérez Hortal
+Author-email: andres.perezhortal@mail.mcgill.ca , andresperezcba@gmail.com
+License: LICENSE.txt
+Description: ======================================================
+        pySkewT -- Atmospheric Profile Plotting and Diagnostics
+        ======================================================
+        
+        pySkewT provides a few useful tools to help with the plotting and analysis of 
+        upper atmosphere data. In particular it provides some useful classes to 
+        handle the awkward skew-x projection.
+        
+        This package is based in the SkewT python package developed by Thomas Chubb
+        (https://pypi.python.org/pypi/SkewT/)
+        
+        The main difference with the orginal SkewT package is that the vertical soundings 
+        plots are handled by an special class (SkewT) derived from the matplotlib Figure
+        class. 
+        
+        The new SkewT class extends the base Figure class with an iterface similar to pyplot
+        and also allows to create the Skew-T plots.
+        This new class allows a complete control over the Figure properties like
+        multiple plots (normal axis and Skew-T axis).
+        
+Platform: UNKNOWN
