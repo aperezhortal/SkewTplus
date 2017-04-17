@@ -55,10 +55,12 @@ The SkewTplus package need the following dependencies
 * matplotlib
 * numpy
 * cython
-* wxPython Phoenix (https://github.com/wxWidgets/Phoenix)
 * libgcc
 
-The wxPython Phoenix project is needed for python 3 compatibility.
+For running the examples:
+* Basemap
+* hdf4
+* netCDF4
 
 Installing SkewT
 ================

@@ -5,7 +5,7 @@ Parcel Analysis
 ===============
 
 
-The SkewTplus package comes with the :py:module:`SkewTplus.thermodynamics` module
+The SkewTplus package comes with the :py:mod:`SkewTplus.thermodynamics` module
 that allows the following computations for a parcel:
 
 * :py:func:`SkewTplus.thermodynamics.parcelAnalysis`
