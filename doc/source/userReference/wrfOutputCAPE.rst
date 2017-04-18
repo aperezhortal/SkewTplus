@@ -5,9 +5,9 @@ WRF Output CAPE plot
 ====================
 
 The :py:func:`SkewTplus.thermodynamics.parcelAnalysis` function allows to compute 
-CAPE and CIN not only in a single vertical sounding, it also support the computation
-over 3D domains (height,latitude or y ,longitude or x) 
-or 4D=(3D + time) ones (time,height,latitude or y ,longitude or x].
+CAPE and CIN not only in a single vertical sounding, it also supports the computation
+over 3D domains (height, latitude or y , longitude or x) 
+or 4D=(3D + time) ones (time, height, latitude or y, longitude or x].
 
 Here is an example for computing CAPE from a WRF output file and plot the values
 as a color plot over a map::

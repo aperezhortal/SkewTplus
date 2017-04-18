@@ -3,14 +3,14 @@ SkewTplus -- Atmospheric Profile Plotting and Diagnostics
 =========================================================
 
 SkewTplus provides a few useful tools to help with the plotting and analysis of 
-upper atmosphere data. In particular it provides some useful classes to 
+upper atmosphere data. In particular, it provides some useful classes to 
 handle the awkward skew-x projection.
         
-This package is based in the SkewT Python package developed by Thomas Chubb
+This package is based on the SkewT Python package developed by Thomas Chubb
 (https://pypi.python.org/pypi/SkewT/)
         
 The main difference with the original *SkewT package* is that the vertical soundings 
-plots are handled by an special class (SkewT).
+plots are handled by a special class (SkewT).
 The new *SkewT* class extends the base
 `matplolib's Figure <http://matplotlib.org/api/figure_api.html?highlight=figure#module-matplotlib.figure>`_
 class with an interface similar to 
@@ -20,11 +20,10 @@ This new class allows a complete control over the Figure properties like
 multiple plots (normal axis and Skew-T axis).
 
 In addition, the **thermodynamics** module was improved.
-All the intensive computations were migrated to Cython and parallelized.
+All the intensive computations were migrated to Cython and paralellized.
    
 The SkewT Python package was a cornerstone of this project.  
 We are grateful to all its collaborators.
-
 
 *Technology builds on technology*
 
@@ -32,7 +31,7 @@ We are grateful to all its collaborators.
 Documentation
 =============
 
-The documentations is separated in two big branches. 
+The documentation is separated in two big branches. 
 The :ref:`user-reference` and the :ref:`developer-reference`.
 The user reference provides a quick overview of the most important features of 
 the package. For more detailed and a comprehensive understanding of the 
@@ -68,9 +67,11 @@ Installing SkewT
 
 
 If all the dependencies are installed, to install the SkewTplus package
-you can download the tarball from the github repository and run::
+you can download the tarball from the `github repository`_ and run::
 
     python setup.py install
+    
+.. _`github repository`: https://github.com/aperezhortal/SkewTplus 
 
 If you want to put it somewhere different than your system files, you can do::
     

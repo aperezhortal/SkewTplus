@@ -3,14 +3,14 @@ SkewTplus -- Atmospheric Profile Plotting and Diagnostics
 =========================================================
 
 SkewTplus provides a few useful tools to help with the plotting and analysis of 
-upper atmosphere data. In particular it provides some useful classes to 
+upper atmosphere data. In particular, it provides some useful classes to 
 handle the awkward skew-x projection.
         
-This package is based in the SkewT Python package developed by Thomas Chubb
+This package is based on the SkewT Python package developed by Thomas Chubb
 (https://pypi.python.org/pypi/SkewT/)
         
 The main difference with the original *SkewT package* is that the vertical soundings 
-plots are handled by an special class (SkewT).
+plots are handled by a special class (SkewT).
 The new *SkewT* class extends the base
 `matplolib's Figure <http://matplotlib.org/api/figure_api.html?highlight=figure#module-matplotlib.figure>`_
 class with an interface similar to 
@@ -67,6 +67,7 @@ To-Do List
 ==========
 * More column diagnostics.
 * Hodographs? Anyone? 
+* Add support for reading ARM soundings 
 
 
 

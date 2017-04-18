@@ -101,7 +101,7 @@ For this example you need netCDF4 and Basemap packages installed::
 
 .. image:: ../img/parcelAnalysisExample.png
 
-In the next chapter, a more intensive use of the the parcelAnalysis function is
+In the next chapter, a more intensive use of the parcelAnalysis function is
 used to compute CAPE for a 3D domain from a WRF output file: :ref:`wrfOutputCAPE`
 
 
