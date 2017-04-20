@@ -7,7 +7,9 @@ For this example you need netCDF4 and Basemap packages installed
 To create the Data plots pyplot is used.
 '''
 
-from __future__ import print_function, division
+# For python 3 portability
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
 
 from mpl_toolkits.basemap import Basemap
 from netCDF4 import Dataset

@@ -1,4 +1,6 @@
-from __future__ import division, print_function
+# For python 3 portability
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
 
 class fileNotFoundException( Exception ):    
     """ Exception when a file is not found"""

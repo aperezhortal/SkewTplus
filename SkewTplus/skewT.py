@@ -12,9 +12,9 @@ and saving of plots is included.
 The behavior of the pyplot **show** method is now part of the Figure class.
 
 '''
-
-from __future__ import division, print_function
-
+# For python 3 portability
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
 import warnings
 
 from matplotlib import get_backend, rcParams, _pylab_helpers

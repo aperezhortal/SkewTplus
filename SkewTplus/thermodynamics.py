@@ -7,7 +7,9 @@ This module make use of the Cython functions in the _thermodynamics.pyx module
 for Parcel analysis for computational efficiency efficiency 
 and parallelization purposes
 '''
-from __future__ import division, print_function
+# For python 3 portability
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
 
 from numpy import arctan, min, exp, log, where
 import numpy
