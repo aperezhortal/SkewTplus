@@ -8,7 +8,7 @@ In this chapter the profile plotting capabilities are described of the SkewTplus
 package are described in greater detail.
 
 In the following example show how to plot two soundings in the same
-Skew-T diagram with out any parcel analysis::
+Skew-T diagram without any parcel analysis::
         
     from SkewTplus.skewT import figure
     from SkewTplus.sounding import sounding
@@ -50,7 +50,7 @@ For more details about the different profile plotting options see
 :py:meth:`SkewTplus.skewT.SkewXAxes.addProfile`
 
 
-In the next chapter the Parcel Analysis tools that are part of the SkewTplus 
+In the next chapter the Parcel Analysis included in the SkewTplus 
 package are described in greater detail:
 :ref:`parcelAnalysis`
 

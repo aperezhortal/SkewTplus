@@ -4,14 +4,14 @@ Fist-Steps
 ==========
 
 
-This chapter offer a quick overview of the main package capabilities:
+This chapter offers a quick overview of the main package capabilities:
 To read a sounding from a txt file and create a quick SkewT diagram.
 
 
 Sounding Data
 -------------
 
-The easiest way to get some sounding data is to visit the University of 
+The easiest way to get sounding data is to visit the University of 
 Wyoming's website:
 
 http://weather.uwyo.edu/upperair/sounding.html
