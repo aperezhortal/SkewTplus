@@ -6,10 +6,12 @@ from __future__ import (absolute_import, division,
 from builtins import (dict, object, range, str,
                       open, zip)
 from datetime import datetime
+import io
 from os.path import isfile
 
 from netCDF4 import Dataset
 from numpy import ndarray
+import numpy
 from numpy.ma.core import mask_or, masked_values, \
     masked_invalid, getmaskarray, MaskedArray
 
@@ -334,104 +336,81 @@ class sounding(object):
         
    
     
-    def readFromTxtFile(self, filePath):
+    def readFromTxtFile(self, filePath, headerLength=6):
         """
         Reads the raw profile data from a University of Wyoming sounding file.
         
-
         Notes
         -----
         1. Data can be downloaded from http://weather.uwyo.edu/upperair/sounding.html
         2. The input file has to conform *Exactly* to the University of 
            Wyoming file format. 
-        3. The diagnostics at the end of the file are ignored.
-        
+        3. The diagnostics at the end of the file are ignored.        
            
         """
-        #--------------------------------------------------------------------
-        # This *should* be a convenient way to read a uwyo sounding
-        #--------------------------------------------------------------------
-        fid = open(filePath)
-        lines = fid.readlines()
-
-        # New: handle whitespace at top of file if present
-        while not lines[0].strip():
-            lines.pop(0)
-
-
-        nlines = len(lines)
-
-        lhi = [1, 9, 16, 23, 30, 37, 46, 53, 58, 65, 72]
-        rhi = [7, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77]
-
-        # initialize output data structure
-        output = {}
-
-        fields = lines[3].split()
-        units = lines[4].split()
-
-        # Handle the file header
-        # First line for WRF profiles differs from the UWYO soundings
-        header = lines[0]
-        if header[:5] == '00000':
-            # WRF profile
-            self.addField('StationNumber' , '00000')
-            self.addField('Longitude' , float(header.split()[5].strip(",")))
-            self.addField('Latitude' , float(header.split()[6]))
-            self.addField('SoundingDate' , header.split()[-1])
-        else:
-            self.addField('StationNumber' , header[:5])
-            dstr = (' ').join(header.split()[-4:])
-            soundingDate = datetime.strptime(dstr, "%HZ %d %b %Y")
-            self.addField('SoundingDate' , soundingDate.strftime("%Y-%m-%d_%H:%M:%S"))
-            
-
-        # This is a data pre-initialization step. 
-        for ff in fields:
-            output[ff.lower()] = []
-
-        lcounter = 5
-        for line, _ in zip(lines[6:], range(nlines)):
-            lcounter += 1
-            
-            # ## New code. We test for pressure in the first column. 
-            # ## If there's no pressure, we get out!
+        
+        
+        def isValidValue(valueString):
+            # True if the string can be converted to float
             try: 
-                output[fields[0].lower()].append(float(line[lhi[0]:rhi[0]]))
+                _ = float(valueString)
+                value = True
             except ValueError: 
-                break
+                value = False
+            return value
+        
+        
+        with open(filePath, 'r') as fileId:
             
-            for ii in range(1, len(rhi)):
-                try: 
-                    # Debug only:
-                    # print fields[ii].lower(), float(line[lhi[ii]:rhi[ii]].strip())
-                    # ## Version < 0.1.4
-                    # output[fields[ii].lower()][idx]=float(line[lhi[ii]:rhi[ii]].strip())
-                     
-                    # ## New Code. Append to list instead of indexing 
-                    # ## pre-allocated data. Explicitly allocate -999
-                    # ## for invalid data (catch ValueError)
-                    textdata = line[lhi[ii]:rhi[ii]].strip()
-                    output[fields[ii].lower()].append(float(textdata))
-                except ValueError: 
-                    output[fields[ii].lower()].append(self.missingValue)
+            lines = fileId.readlines()
 
-        for fieldName, units in zip(fields, units):
-            fieldName = fieldName.lower()
-            # Set mask for missing data
-            
-            fieldValues = masked_values(output[fieldName], self.missingValue)
-            
-            fieldValues = masked_invalid(fieldValues)
+            # New: handle whitespace at top of file if present
+            offset=0
+            while not lines[0].strip():
+                lines.pop(0)
+                offset +=1
             
             
-            fieldValues.harden_mask()
+            # Handle the file header
+            # First line for WRF profiles differs from the UWYO soundings
+            header = lines[0]
+            if header[:5] == '00000':
+                # WRF profile
+                self.addField('StationNumber' , '00000')
+                self.addField('Longitude' , float(header.split()[5].strip(",")))
+                self.addField('Latitude' , float(header.split()[6]))
+                self.addField('SoundingDate' , header.split()[-1])
+            else:
+                self.addField('StationNumber' , header[:5])
+                dstr = (' ').join(header.split()[-4:])
+                soundingDate = datetime.strptime(dstr, "%HZ %d %b %Y")
+                self.addField('SoundingDate' , soundingDate.strftime("%Y-%m-%d_%H:%M:%S"))
             
-            self.addField(fieldName , fieldValues,
-                          units=units, missingValue=self.missingValue,
-                          longName=_txtSoundingLongNames[fieldName])
             
-        return None
+            fieldsNames = lines[headerLength-3].split()
+            filedsUnits = lines[headerLength-2].split()
+            
+            arePressureValues = [ isValidValue(_line[0:7]) for _line in lines]  
+            
+            fieldsData = numpy.genfromtxt(filePath, unpack=True,
+                                          skip_header=headerLength+offset,
+                                          max_rows=numpy.argwhere(arePressureValues).max()-headerLength+1,
+                                          delimiter=7,
+                                          usemask=True,
+                                          missing_values = self.missingValue )
+            
+
+            for fieldName,fieldValues, units in zip(fieldsNames, fieldsData, filedsUnits):
+                # Set mask for missing data
+                                
+                fieldValues = masked_invalid(fieldValues)                
+                
+                fieldValues.harden_mask()
+                
+                self.addField(fieldName , fieldValues,
+                              units=units, missingValue=self.missingValue,
+                              longName=_txtSoundingLongNames[fieldName.lower()])
+            
 
 
 
