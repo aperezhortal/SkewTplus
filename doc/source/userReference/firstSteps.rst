@@ -8,41 +8,6 @@ This chapter offers a quick overview of the main package capabilities:
 To read a sounding from a txt file and create a quick SkewT diagram.
 
 
-Sounding Data
--------------
-
-The easiest way to get sounding data is to visit the University of 
-Wyoming's website:
-
-http://weather.uwyo.edu/upperair/sounding.html
-
-To get some sounding data, follow the link and find the date, and location 
-you are interested in, view the data as a text file and just save the file 
-to your system. If you want to get loads of data please be considerate about 
-the way you go about doing this! (Lots of wget requests makes the server 
-administrators unhappy).
-
-You can also pass your own data to SkewT by writing a text file in 
-**identical** format to the University of Wyoming files, which are 
-constant-width columns. Here's a sample of the first few lines of one of the 
-bundled examples::
-
-    94975 YMHB Hobart Airport Observations at 00Z 02 Jul 2013
-
-    -----------------------------------------------------------------------------
-       PRES   HGHT   TEMP   DWPT   RELH   MIXR   DRCT   SKNT   THTA   THTE   THTV
-        hPa     m      C      C      %    g/kg    deg   knot     K      K      K 
-    -----------------------------------------------------------------------------
-     1004.0     27   12.0   10.2     89   7.84    330     14  284.8  306.7  286.2
-     1000.0     56   12.4   10.3     87   7.92    325     16  285.6  307.8  286.9
-      993.0    115   12.8    9.7     81   7.66    311     22  286.5  308.1  287.9
-
-
-Alternatively you can create a dictionary with the column headers as keys 
-and the data as 1D python arrays (preferably use ``ma.masked_array``). 
-There's more about this under the "Running SkewT" section below.
-
-
 Fist steps using SkewTplus
 --------------------------
 
@@ -144,7 +109,8 @@ parcel analysis, and plot them side to side::
 
 .. image:: ../img/twoSoundingsPlots.png
 
-
-The profile plotting capabilities are described in greater detail in the next chapter:
-:ref:`profilePlotting`
+The different sounding sources supported to initialize the 
+:py:class:`~SkewTplus.sounding.sounding` class are described
+in greater detail in the next chapter:
+:ref:`soundingInitialization`
 

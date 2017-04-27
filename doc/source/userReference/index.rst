@@ -16,6 +16,7 @@ The User Reference has the following chapters
     :maxdepth: 2
     
     firstSteps
+    soundingInitialization
     profilePlotting
     parcelAnalysis
     wrfOutputCAPE

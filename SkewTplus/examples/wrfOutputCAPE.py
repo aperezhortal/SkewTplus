@@ -1,6 +1,5 @@
 '''
-Simple SkewT Figure example from Sounding
-
+Compute and plot CAPE from a WRF output file
 
 For this example you need netCDF4 and Basemap packages installed
 
