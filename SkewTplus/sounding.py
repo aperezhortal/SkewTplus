@@ -392,6 +392,7 @@ class sounding(object):
             Station ID
             
         """
+        # Inspired in pymeteo.uwyo.py , fetch_from_web
         
         if isinstance(soundingDate, str):
             soundingDate = datetime.strptime(soundingDate, "%Y%m%d:%H")
@@ -436,7 +437,8 @@ class sounding(object):
         3. The diagnostics at the end of the file are ignored.        
            
         """
-        
+        # Now this class uses Numpy's genfromtxt function to read the TXT files,
+        # Idea taken from pymeteo.uwyo.py , fetch_from_file method
         
         def isValidValue(valueString):
             # True if the string can be converted to float
