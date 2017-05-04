@@ -15,6 +15,7 @@ The behavior of the pyplot **show** method is now part of the Figure class.
 # For python 3 portability
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
+
 import warnings
 
 from matplotlib import get_backend, rcParams, _pylab_helpers
@@ -33,7 +34,7 @@ import numpy
 from numpy.ma.core import masked_invalid, masked_array, getmaskarray
 
 from SkewTplus.thermodynamics import degCtoK, Rs_da, Cp_da, moistAscent, \
-    liftParcel, parcelAnalysis
+    liftParcel, parcelAnalysis, virtualTemp3, virtualTemp4
 import matplotlib.axis as maxis
 import matplotlib.spines as mspines
 import matplotlib.transforms as transforms
@@ -243,6 +244,7 @@ class SkewXAxes(Axes):
                    initialLevel=0,
                    parcel=True,
                    label=None,
+                   useVirtualTemperature=1,
                    diagnostics=False, markers=True,
                    **kwargs):
         """
@@ -339,7 +341,7 @@ class SkewXAxes(Axes):
         temperature = masked_invalid(temperature[~mask])
         dewPointTemperature = masked_invalid(dewPointTemperature[~mask])
         
-        
+        # Convert temperatures and pressure to hPa
         if not hPa:
             pressure /= 100
         
@@ -374,7 +376,11 @@ class SkewXAxes(Axes):
             
             parcelTemperature = liftParcel(initialTemperature, pressure, 
                                            pressureAtLCL, initialLevel=initialLevel,
-                                           hPa=True, celsius=True,)
+                                           hPa=True, celsius=True)
+            
+
+                
+
             
             # Add LCL
             belowLCL = numpy.where(pressure > pressureAtLCL, True, False)        
@@ -399,6 +405,21 @@ class SkewXAxes(Axes):
             newPressure = numpy.concatenate((newPressure[belowLFC], [pressureAtLFC], newPressure[~belowLFC]))
             
             newTemperature = numpy.interp(newPressure, pressure[::-1], temperature[::-1])
+            
+            if useVirtualTemperature:
+                newDewPointTemperature = numpy.interp(newPressure, pressure[::-1], dewPointTemperature[::-1])
+                newTemperature = virtualTemp3(newTemperature, newDewPointTemperature, newPressure*100)
+                
+                belowLCL = (newPressure >= pressureAtLCL)
+                
+                newParcelTemperature[belowLCL]= virtualTemp3(newParcelTemperature[belowLCL], 
+                                                    dewPointTemperature[initialLevel], newPressure[belowLCL]*100)
+                
+                aboveLCL = (newPressure < pressureAtLCL)
+                
+                newParcelTemperature[aboveLCL]= virtualTemp4(newParcelTemperature[aboveLCL], 
+                                                             newPressure[aboveLCL]*100)
+                
         else:
             newTemperature = temperature
             newPressure = pressure
@@ -447,6 +468,14 @@ class SkewXAxes(Axes):
         
         
             if markers:
+                if useVirtualTemperature:
+                    temperatureAtLCL = virtualTemp4(temperatureAtLCL, 
+                                                    pressureAtLCL*100)
+                    temperatureAtLFC = virtualTemp4(temperatureAtLFC, 
+                                                    pressureAtLFC*100)
+                    temperatureAtEL = virtualTemp4(temperatureAtEL, 
+                                                    pressureAtEL*100)
+                    
                 self.plot(temperatureAtLCL, pressureAtLCL, ls='', marker='o', color='r')
                 self.plot(temperatureAtLFC, pressureAtLFC, ls='', marker='o', color='g')
                 self.plot(temperatureAtEL, pressureAtEL, ls='', marker='o', color='k')
