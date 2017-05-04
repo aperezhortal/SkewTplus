@@ -4,7 +4,6 @@ Simple SkewT Figure example from Sounding
 
 from __future__ import print_function, division
 
-
 from SkewTplus.skewT import figure
 from SkewTplus.sounding import sounding
 
@@ -19,7 +18,7 @@ mySkewT_Figure = figure()
 mySkewT_Axes = mySkewT_Figure.add_subplot(111, projection='skewx')
 
 # Extract the data from the Sounding 
-# The getCleanSounding method remove levels where invalid temperatura or pressure
+# The getCleanSounding method remove levels where invalid temperature or pressure
 # values are present
 pressure, temperature, dewPointTemperature = mySounding.getCleanSounding()
 

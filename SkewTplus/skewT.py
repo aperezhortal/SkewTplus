@@ -354,6 +354,7 @@ class SkewXAxes(Axes):
                                                   dewPointTemperature,
                                                   hPa=True,
                                                   celsius=True,
+                                                  useVirtualTemperature=1,
                                                   initialLevel=initialLevel,
                                                   method=method)
         

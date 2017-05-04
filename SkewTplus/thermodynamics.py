@@ -68,6 +68,7 @@ def parcelAnalysis(pressure,
                    fullFields=1,
                    method=0,
                    initialLevel=0,
+                   useVirtualTemperature=1,
                    tolerance=0.1,
                    maxIterations=20,
                    depth=30000):
@@ -151,6 +152,7 @@ def parcelAnalysis(pressure,
                   initialLevel=initialLevel,
                   tolerance=tolerance,
                   maxIterations=maxIterations,
+                  useVirtualTemperature=useVirtualTemperature,
                   depth=depth)
                    
     if pressure.ndim == 4:
