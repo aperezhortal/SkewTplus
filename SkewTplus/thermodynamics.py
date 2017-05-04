@@ -13,7 +13,7 @@ from __future__ import (absolute_import, division,
 
 from numpy import arctan, min, exp, log, where
 import numpy
-from numpy.ma.core import masked_array, masked_where
+from numpy.ma.core import masked_array
 
 from SkewTplus._thermodynamics import _parcelAnalysis4D, _parcelAnalysis3D, \
     _parcelAnalysis1D, _getLCL, _liftParcel, _moistAscent
@@ -27,8 +27,16 @@ __email__ = "andresperezcba@gmail.com"
 __credits__ = 'Based on the thermodynamics.py module from the SkewT package developed by Thomas Chubb'
 
 
+
+
+    
+
+
 #-----------------------------------------------------------------------
-#   General Constants
+# Here we go. A set of functions that I use from time to time to calculate 
+# the basic stuff that I'm sick of doing over and over! I'm going to 
+# endeavour to include references and global constants to make it all nice 
+# and legible.
 #-----------------------------------------------------------------------
 Rs_da = 287.05  # Specific gas const for dry air, J kg^{-1} K^{-1}
 Rs_v = 461.51  # Specific gas const for water vapour, J kg^{-1} K^{-1}
@@ -46,7 +54,7 @@ boltzmann = 5.67e-8  # Stefan-Boltzmann constant
 mv = 18.0153e-3  # Mean molar mass of water vapor(kg/mol)
 m_a = 28.9644e-3  # Mean molar mass of air(kg/mol)
 Rstar_a = 8.31432  # Universal gas constant for air (N m /(mol K))
-#-----------------------------------------------------------------------
+
 
 
 
@@ -380,7 +388,8 @@ def getLCL(startPressure,
     
     return pressure / pressureConversionFactor, temperature - temperatureConversionOffset 
 
-       
+    
+        
     
     
                      
@@ -490,13 +499,16 @@ def ThetaE(tempk, pres, e):
 
     # tempc
     tempc = tempk - degCtoK
-   
+    # Calculate theta
+    theta = Theta(tempk, pres)
+
+
     # T_lcl formula needs RH
     es = VaporPressure(tempc)
     RH = 100.*e / es
 
     # theta_e needs q (water vapour mixing ratio)
-    qv = vaporMixingRatio(e, pres)
+    qv = MixRatio(e, pres)
 
     # Calculate the temp at the Lifting Condensation Level
     T_lcl = ((tempk - 55) * 2840 / (2840 - (log(RH / 100) * (tempk - 55)))) + 55
@@ -524,7 +536,7 @@ def ThetaE_Bolton(tempk, pres, e, pref=100000.):
 
     # Preliminary:
     T = tempk
-    qv = vaporMixingRatio(e, pres)
+    qv = MixRatio(e, pres)
     Td = DewPoint(e) + degCtoK
     kappa_d = Rs_da / Cp_da
 
@@ -555,7 +567,7 @@ def ThetaV(tempk, pres, e):
     theta_v    : Virtual potential temperature
     """ 
 
-    mixr = vaporMixingRatio(e, pres)
+    mixr = MixRatio(e, pres)
     theta = Theta(tempk, pres)
 
     return theta * (1 + mixr / Epsilon) / (1 + mixr)
@@ -579,7 +591,7 @@ def GammaW(tempk, pres):
 
     tempc = tempk - degCtoK
     es = VaporPressure(tempc)
-    ws = vaporMixingRatio(es, pres)
+    ws = MixRatio(es, pres)
 
     # tempv=VirtualTempFromMixR(tempk,ws)
     tempv = VirtualTemp(tempk, pres, es)
@@ -636,80 +648,6 @@ def Density(tempk, pres, mixr):
     virtualT = VirtualTempFromMixR(tempk, mixr)
     return pres / (Rs_da * virtualT)
 
-
-
-def virtualTemp4(T, p):
-    """Virtual Temperature, but using vapor mixing ratio instead the vapor pressure
-
-    Parameters
-    ---------    
-    T: float
-        Temperature in Celsius degrees
-    
-    Td: float
-        Dew Point Temperature un Celsius Degrees
-    
-    p: float
-        Atmospheric pressure (Pa)
-
-    Returns
-    -------
-    Virtual temperature : float32
-        In Celsius degrees
-    """
-    
-
-    _vaporMixingRatio = vaporMixingRatio(VaporPressure(T),p)
-                
-    return ((T+degCtoK) * (1. + (_vaporMixingRatio / Epsilon)) / (1. +_vaporMixingRatio)) - degCtoK
-
-def virtualTemp3(T, Td, p):
-    """Virtual Temperature, but using vapor mixing ratio instead the vapor pressure
-
-    Parameters
-    ---------    
-    T: float
-        Temperature in Celsius degrees
-    
-    Td: float
-        Dew Point Temperature un Celsius Degrees
-    
-    p: float
-        Atmospheric pressure (Pa)
-
-    Returns
-    -------
-    Virtual temperature : float32
-        In Celsius degrees
-    """
-    
-    Td = masked_where(Td<-degCtoK,Td)
-        
-    _vaporMixingRatio = vaporMixingRatio(VaporPressure(Td),p)
-                
-    return ((T+degCtoK) * (1. + (_vaporMixingRatio / Epsilon)) / (1. +_vaporMixingRatio)) - degCtoK
-
-def virtualTemp2(T, qv, p):
-    """Virtual Temperature, but usig vapor mixing ratio instead the vapor pressure
-
-    Parameters
-    ---------    
-    T: float
-        Temperature in Kelvin degrees
-    
-    qv: float
-        Vapour mixing ratio (Kg/Kg)
-    
-    p: float
-        Atmospheric pressure (Pa)
-
-    Returns
-    -------
-    Virtual temperature : float32
-        In Kelvin degrees
-    """
-
-    return T * (1. + (qv / Epsilon)) / (1. + qv)  
 
 def VirtualTemp(tempk, pres, e):
     """Virtual Temperature
@@ -802,9 +740,7 @@ def SatVap(dwpt, phase="liquid"):
             " instead, with dwpt as argument")
     return VaporPressure(dwpt, phase)
 
-
-
-def vaporMixingRatio(e, p):
+def MixRatio(e, p):
     """Mixing ratio of water vapour
     INPUTS
     e (Pa) Water vapor pressure

@@ -857,7 +857,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
     
     # # Rough approximation
     cdef float32 J = 0
-    cdef float32 initialMixingRatio = _vaporMixingRatio(_getWaterSatPressure(initialDewPointTemperature),
+    cdef float32 initialMixingRatio = _vaporMixingRatio(_waterSatVaporPressureBolton(initialDewPointTemperature),
                                                         initialPressure)
     
     # TODO: check dew point temp is never higher than the env
@@ -1002,7 +1002,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
     # # Vapor mixing ratio is constant 
     if next_level_LCL >= initialLevel + 1 :
          
-        parcelVaporMixingRatio = _vaporMixingRatio(_getWaterSatPressure(dewPointTemperature[initialLevel]),
+        parcelVaporMixingRatio = _vaporMixingRatio(_waterSatVaporPressureBolton(dewPointTemperature[initialLevel]),
                                                    pressure[initialLevel])
         
         for level in range(initialLevel + 1, next_level_LCL):
@@ -1012,16 +1012,14 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
             if dewPointTemperature[level] > 0 and useVirtualTemperature: 
                                 
                 envVirtualTemp = _virtualTemp(temperature[level],
-                                              _getWaterSatPressure(dewPointTemperature[level]),
+                                              _waterSatVaporPressureBolton(dewPointTemperature[level]),
                                               pressure[level])
             else:
                 envVirtualTemp = temperature[level]  # Missing data in humidity
                 
             
             if useVirtualTemperature:
-                parcelVirtualTemp = _virtualTemp2(parcelTemperature[level], 
-                                                  parcelVaporMixingRatio,
-                                                  pressure[level])
+                parcelVirtualTemp = _virtualTemp2(parcelTemperature[level], parcelVaporMixingRatio, pressure[level])
             else:
                 parcelVirtualTemp = parcelTemperature[level]            
              
@@ -1038,7 +1036,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
          
         if  dewPointTemperature[level] > 0 and useVirtualTemperature: 
             envVirtualTemp = _virtualTemp(temperature[level],
-                                         _getWaterSatPressure(dewPointTemperature[level]) ,
+                                         _waterSatVaporPressureBolton(dewPointTemperature[level]) ,
                                          pressure[level])
         else:
             envVirtualTemp = temperature[level]
@@ -1046,7 +1044,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
         
         if useVirtualTemperature:
             parcelVirtualTemp = _virtualTemp(parcelTemperature[level],
-                                             _getWaterSatPressure(parcelTemperature[level]),
+                                             _waterSatVaporPressureBolton(parcelTemperature[level]),
                                              pressure[level])
         else:   
             parcelVirtualTemp = parcelTemperature[level]          
@@ -1329,7 +1327,7 @@ cdef float32 dTdP_Moist(float32 temperature, float32 pressure) nogil:
      
     cdef float32 temperatureInC = temperature - degCtoK
      
-    cdef float32 es = _getWaterSatPressure(temperature) 
+    cdef float32 es = _waterSatVaporPressureBolton(temperature) 
     cdef float32 vaporMixingRatio = _vaporMixingRatio(es,
                                                       pressure)
      
@@ -1359,7 +1357,7 @@ cdef inline float32 _T_LCL_RootFunction(float32 T ,
     
     # Positive values means supersaturation  
     return (startVaporMixingRatio * startPressure * ((T / startTemperature) ** Cp_ov_Rs_da) / (startVaporMixingRatio + Epsilon) - 
-            _getWaterSatPressure(T))
+            _waterSatVaporPressureBolton(T))
     
 
 
@@ -1397,7 +1395,7 @@ cdef temperatureAndPressure _tempAndPressureAtLCL(float32 startPressure,
      
          
      
-    cdef float32 startVaporMixingRatio = _vaporMixingRatio(_getWaterSatPressure(startDewPointTemperature),
+    cdef float32 startVaporMixingRatio = _vaporMixingRatio(_waterSatVaporPressureBolton(startDewPointTemperature),
                                                            startPressure)
      
     cdef float32 firstGuess = (startDewPointTemperature - 
@@ -1436,7 +1434,7 @@ cdef temperatureAndPressure _tempAndPressureAtLCL(float32 startPressure,
       
      
      
-cdef inline float32 _getWaterSatPressure(float32 temperature) nogil:
+cdef inline float32 _waterSatVaporPressureBolton(float32 temperature) nogil:
     """
     Water vapor saturation pressure using Bolton 1980 formula.
     
