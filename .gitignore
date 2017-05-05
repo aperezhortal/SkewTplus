@@ -1,0 +1,24 @@
+
+# Compiled source #
+###################
+*.o
+*.so
+*.cpp
+
+# Project configuration files
+#############################
+
+.project
+.pydevproject
+
+
+# Python precompiled
+####################
+*/__pycache__
+__pycache__
+*.pyc
+
+
+doc/build
+
+#.gitignore
