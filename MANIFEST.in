@@ -1,3 +1,3 @@
 include *.txt *.rst
-#recursive-include examples *
-recursive-include SkewTplus *.pyx 
+recursive-include examples *
+recursive-include SkewTplus *.pyx *.pxd  

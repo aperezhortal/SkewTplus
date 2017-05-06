@@ -41,13 +41,12 @@ The SkewTplus package need the following dependencies
 * matplotlib
 * numpy
 * cython
-* libgcc
+* netCDF4
 
 For running the examples:
 
 * Basemap
-* hdf4
-* netCDF4
+
 
 
 Installing SkewT

@@ -1,4 +1,28 @@
+Changelog
+=========
 
+
+Version 1.1
+-----------
+
+* The package is now available in the python package index.
+This allows to easily install the package with pip.
+* Update setup.py to use setuptools instead of numpy.distutils.
+* Add the option to compute CAPE and CIN with or withut the Virtual Temperature
+correction.
+* addProfile to SkewT plots updated: When Virtual temperature is used in the 
+parcel analysis for the profiles added, virtual temperature is plotted instead 
+of the original one.
+* Sounding class was improved substancially.
+    * Now soundings can be downloaded directly from the University of Wyoming website
+    * ARM sounding netcdf files reader added
+* Package is now compatible with python 2 and python 3
+* Documentation was improved
+
+Version 1.0
+-----------
+
+First stable version
 
     
 
