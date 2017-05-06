@@ -1,26 +1,56 @@
 
 
 
-
 from __future__ import division, absolute_import, print_function
 
-from Cython.Build.Dependencies import cythonize
-from numpy.distutils.core import Extension, setup
 
+from setuptools import setup, find_packages
+from setuptools.extension import Extension
 
-thermodynamicsLibExtension = Extension( "SkewTplus._thermodynamics",
-                                        sources = ['SkewTplus/_thermodynamics.pyx'],
-                                        extra_compile_args = ['-fopenmp'],
-                                        extra_link_args = ['-fopenmp'] ,
-                                        language='c++')
+try:
+    import numpy
+except ImportError:
+    raise RuntimeError( "Numpy required to pior running the package installation\n" +
+                        "Try installing it with:\n" + 
+                        "$> pip install numpy" )
+    
+    
+try:
+    from Cython.Build.Dependencies import cythonize
+    CythonPresent = True
+except ImportError:
+    CythonPresent = False
+    
+
+if CythonPresent:
+    
+    thermodynamicsLibExtension = Extension( "SkewTplus._thermodynamics",
+                                            sources = ['SkewTplus/_thermodynamics.pyx'],
+                                            extra_compile_args = ['-fopenmp'],
+                                            extra_link_args = ['-fopenmp'] ,
+                                            include_dirs=[numpy.get_include()],
+                                            language='c++') 
+                                           
+    externalModules = cythonize([thermodynamicsLibExtension])                                       
+else:
+    thermodynamicsLibExtension = Extension( "SkewTplus._thermodynamics",
+                                            sources = ['SkewTplus/_thermodynamics.cpp'],
+                                            extra_compile_args = ['-fopenmp'],
+                                            extra_link_args = ['-fopenmp'] ,
+                                            include_dirs=[numpy.get_include()],
+                                            language='c++') 
+    
+    externalModules = [thermodynamicsLibExtension]
+
+build_requires=['matplotlib','numpy']
 
 setup(
     name='SkewTplus',
-    version='1.1.0',
+    version='1.1.7',
     author = "Andres Perez Hortal",
-    author_email = "andresperezcba@gmail.com",    
-    packages=['SkewTplus'],
-    ext_modules = cythonize([ thermodynamicsLibExtension]),
+    author_email = "andresperezcba@gmail.com",
+    packages=find_packages(),
+    ext_modules = externalModules,
     url='http://pypi.python.org/pypi/SkewTplus/',
     license='LICENSE.txt',
     description='Atmospheric Profile Plotting and Diagnostics',
@@ -35,7 +65,8 @@ setup(
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Cython'],
-    install_requires=['matplotlib','numpy','cython','libgcc'], 
-)
+    setup_requires=build_requires,
+    install_requires=build_requires
+    )
 
 

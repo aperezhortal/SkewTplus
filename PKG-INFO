@@ -1,6 +1,6 @@
-Metadata-Version: 1.0
+Metadata-Version: 1.2
 Name: pySkewT
-Version: 1.0.0
+Version: 1.1.0
 Summary: Extension of matplotlib to create skewT plots and analyses from atmospheric vertical profile
 Home-page: http://pypi.python.org/pypi/SkewT/
 Author: Andrés A. Pérez Hortal
