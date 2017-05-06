@@ -53,9 +53,21 @@ For running the examples:
 Installing SkewT
 ================
 
+PIP install
+-----------
 
-If all the dependencies are installed, to install the SkewTplus package
-you can download the tarball from the github repository and run::
+The easiest way is to install the package with pip::
+
+    pip install SkewTplus
+
+
+Install from source
+-------------------
+
+The latest version can be installed manually by downloading the sources from
+https://github.com/aperezhortal/SkewTplus
+
+Then, run::
 
     python setup.py install
 
@@ -63,11 +75,14 @@ If you want to put it somewhere different than your system files, you can do::
     
     python setup.py install --prefix=/path/to/local/dir
 
+IMPORTANT: All the dependencies need to be already installed! 
+
+
+
 To-Do List
 ==========
 * More column diagnostics.
-* Hodographs? Anyone? 
-* Add support for reading ARM soundings 
+* Hodographs 
 
 
 
