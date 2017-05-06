@@ -5,6 +5,7 @@ README.rst
 setup.py
 SkewTplus/__init__.py
 SkewTplus/_thermodynamics.cpp
+SkewTplus/_thermodynamics.pyx
 SkewTplus/errorHandling.py
 SkewTplus/skewT.py
 SkewTplus/sounding.py
