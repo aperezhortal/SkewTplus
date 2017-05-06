@@ -324,7 +324,7 @@ def _parcelAnalysis4D(float32[:, :, :, :] pressure,
                       int method=0,
                       int initialLevel=0,
                       float32 tolerance=0.1,
-                      int useVirtualTemperature=1,
+                      int useVirtual=1,
                       int maxIterations=20,
                       float32 depth=30000):
     """
@@ -395,7 +395,7 @@ def _parcelAnalysis4D(float32[:, :, :, :] pressure,
                                                          tolerance=tolerance,
                                                          maxIterations=maxIterations,
                                                          maxPressureStep=maxPressureStep,
-                                                         useVirtualTemperature=useVirtualTemperature,
+                                                         useVirtual=useVirtual,
                                                          method=method,
                                                          depth=depth,
                                                          initialLevel=initialLevel)
@@ -444,7 +444,7 @@ def _parcelAnalysis3D(float32[:, :, :] pressure,
                       float32 maxPressureStep=2.,
                       bint fullFields=True,
                       int method=False,
-                      int useVirtualTemperature=1,
+                      int useVirtual=1,
                       int initialLevel=0,
                       float32 tolerance=0.1,
                       int maxIterations=20,
@@ -512,7 +512,7 @@ def _parcelAnalysis3D(float32[:, :, :] pressure,
                                                      maxPressureStep=maxPressureStep,
                                                      method=method,
                                                      initialLevel=initialLevel,
-                                                     useVirtualTemperature=useVirtualTemperature,
+                                                     useVirtual=useVirtual,
                                                      tolerance=tolerance,
                                                      maxIterations=maxIterations,
                                                      depth=depth)
@@ -562,7 +562,7 @@ def _parcelAnalysis1D(float32[:] pressure,
                       bint fullFields=True,
                       int method=0,
                       int initialLevel=0,
-                      int useVirtualTemperature=1,
+                      int useVirtual=1,
                       float32 tolerance=0.1,
                       int maxIterations=20,
                       float32 depth=30000):
@@ -674,7 +674,7 @@ def _parcelAnalysis1D(float32[:] pressure,
                                                 tolerance=tolerance,
                                                 maxIterations=maxIterations,
                                                 maxPressureStep=maxPressureStep,
-                                                useVirtualTemperature=useVirtualTemperature,
+                                                useVirtual=useVirtual,
                                                 method=method,
                                                 depth=depth,
                                                 initialLevel=initialLevel)
@@ -708,7 +708,7 @@ cdef parcelAnalysisOutput __parcelAnalysis1D(float32[:] pressure,
                                              float32 maxPressureStep=2.,
                                              int method=0,
                                              int initialLevel=0,
-                                             int useVirtualTemperature=0,
+                                             int useVirtual=0,
                                              float32 tolerance=0.1,
                                              int maxIterations=20,
                                              float32 depth=30000) nogil:                                            
@@ -751,7 +751,7 @@ cdef parcelAnalysisOutput __parcelAnalysis1D(float32[:] pressure,
                                                          maxPressureStep=maxPressureStep,
                                                          tolerance=tolerance,
                                                          maxIterations=maxIterations,
-                                                         useVirtualTemperature=useVirtualTemperature,
+                                                         useVirtual=useVirtual,
                                                          initialLevel=0)
         
         # printf("Level:%d  CAPE:%.0f\n",level,myParcelAnalysisOutput.CAPE)
@@ -764,7 +764,7 @@ cdef parcelAnalysisOutput __parcelAnalysis1D(float32[:] pressure,
                                                                  maxPressureStep=maxPressureStep,
                                                                  tolerance=tolerance,
                                                                  maxIterations=maxIterations,
-                                                                 useVirtualTemperature=useVirtualTemperature,
+                                                                 useVirtual=useVirtual,
                                                                  initialLevel=level)
             
             # printf("Old CAPE=%.1f   CAPE=%.1f"%mostUnstableParcelAnalysis.CAPE , myParcelAnalysisOutput.CAPE)
@@ -785,7 +785,7 @@ cdef parcelAnalysisOutput __parcelAnalysis1D(float32[:] pressure,
                                                          dewPointTemperature,
                                                          tolerance=tolerance,
                                                          maxIterations=maxIterations,
-                                                         useVirtualTemperature=useVirtualTemperature,
+                                                         useVirtual=useVirtual,
                                                          maxPressureStep=maxPressureStep,
                                                          initialLevel=initialLevel)
 
@@ -800,7 +800,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
                                                   float32[:] dewPointTemperature,
                                                   float32 maxPressureStep=2.,
                                                   int maxIterations=20,
-                                                  int useVirtualTemperature = 0,
+                                                  int useVirtual = 0,
                                                   float32 tolerance=0.1,
                                                   int initialLevel=0) nogil:  
     """
@@ -1009,7 +1009,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
             
             
             
-            if dewPointTemperature[level] > 0 and useVirtualTemperature: 
+            if dewPointTemperature[level] > 0 and useVirtual: 
                                 
                 envVirtualTemp = _virtualTemp(temperature[level],
                                               _waterSatVaporPressureBolton(dewPointTemperature[level]),
@@ -1018,7 +1018,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
                 envVirtualTemp = temperature[level]  # Missing data in humidity
                 
             
-            if useVirtualTemperature:
+            if useVirtual:
                 parcelVirtualTemp = _virtualTemp2(parcelTemperature[level], parcelVaporMixingRatio, pressure[level])
             else:
                 parcelVirtualTemp = parcelTemperature[level]            
@@ -1034,7 +1034,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
     # # Then compute B above the LCL (saturation)    
     for level in range(next_level_LCL, numberOfLevels):
          
-        if  dewPointTemperature[level] > 0 and useVirtualTemperature: 
+        if  dewPointTemperature[level] > 0 and useVirtual: 
             envVirtualTemp = _virtualTemp(temperature[level],
                                          _waterSatVaporPressureBolton(dewPointTemperature[level]) ,
                                          pressure[level])
@@ -1042,7 +1042,7 @@ cdef parcelAnalysisOutput _singleParcelAnalysis1D(float32[:] pressure,
             envVirtualTemp = temperature[level]
             
         
-        if useVirtualTemperature:
+        if useVirtual:
             parcelVirtualTemp = _virtualTemp(parcelTemperature[level],
                                              _waterSatVaporPressureBolton(parcelTemperature[level]),
                                              pressure[level])

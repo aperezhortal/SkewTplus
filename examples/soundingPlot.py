@@ -24,7 +24,7 @@ pressure, temperature, dewPointTemperature = mySounding.getCleanSounding()
 
 # Add a profile to the Skew-T diagram
 mySkewT_Axes.addProfile(pressure,temperature, dewPointTemperature ,
-                        hPa=True, celsius=True, method=0, diagnostics=True)
+                        hPa=True, celsius=True, method=0, diagnostics=True, useVirtual=1)
  
 # Show the figure
 mySkewT_Figure.show()
