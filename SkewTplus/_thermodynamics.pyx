@@ -12,8 +12,8 @@ and parallelization purposes
 '''
 
 __author__ = "Andres Perez Hortal"
-__copyright__ = "Copyright (c) 2017, Andres A. Perez Hortal"
-__license__ = "BSD-3-Clause Licence, see LICENCE.txt for more details"
+__copyright__ = "Copyright (c) 2017, Andres A. Perez Hortal,, McGill University"
+__license__ = "BSD-3-Clause License, see LICENCE.txt for more details"
 __email__ = "andresperezcba@gmail.com"
 
 
