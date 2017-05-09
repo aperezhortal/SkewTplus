@@ -20,5 +20,8 @@ __pycache__
 
 
 doc/build
+dist
+build
+SkewTplus.egg-info
 
 #.gitignore
