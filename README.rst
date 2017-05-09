@@ -40,7 +40,7 @@ The SkewTplus package need the following dependencies
 
 * matplotlib
 * numpy
-* cython
+* cython (optional)
 * netCDF4
 
 For running the examples:
@@ -49,13 +49,17 @@ For running the examples:
 
 
 
-Installing SkewT
-================
+Installing SkewTplus
+====================
 
 PIP install
 -----------
 
-The easiest way is to install the package with pip::
+To install the package using **pip** the numpy package must be already installed.
+If is not installed, you can install it by running::
+    pip install numpy
+
+After the numpy package was installed, to install the SkewTplus package run::
 
     pip install SkewTplus
 
@@ -66,7 +70,11 @@ Install from source
 The latest version can be installed manually by downloading the sources from
 https://github.com/aperezhortal/SkewTplus
 
-Then, run::
+To install the package manually, the numpy package must be already installed.
+If is not installed, you can install it by running::
+    pip install numpy
+    
+Then, you can install the SkewTplus package executing::
 
     python setup.py install
 
@@ -74,14 +82,39 @@ If you want to put it somewhere different than your system files, you can do::
     
     python setup.py install --prefix=/path/to/local/dir
 
-IMPORTANT: All the dependencies need to be already installed! 
+IMPORTANT: If you install it using this way, all the dependencies need to be already installed! 
+
+Conda install
+-------------
+
+If you are using an anaconda environment, to install the package execute::
+    
+    conda install -c andresperezcba skewtplus
+    
+
+Contributions
+===========
+
+SkewTplus is an open source software project.
+Contributions to the package are welcomed from all users.
+Feel free to suggest enhancements or report bugs by opening an issue in the github project page: 
+
+https://github.com/aperezhortal/SkewTplus/issues
+
+Thanks for using the SkewTplus package, for any feedback feel free to write to 
+andresperezcba AT gmail DOT com
 
 
+Code
+----
 
-To-Do List
-==========
-* More column diagnostics.
-* Hodographs 
+The latest source code can be obtained with the command::
+
+    git clone https://github.com/aperezhortal/SkewTplus.git
+
+If you are planning on making changes that you would like included in SkewTplus,
+forking the repository is highly recommended.
+
 
 
 

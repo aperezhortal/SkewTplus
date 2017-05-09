@@ -1,7 +1,15 @@
-
-
-
+"""
+Setup 
+"""
 from __future__ import division, absolute_import, print_function
+
+
+__author__ = "Andres Perez Hortal"
+__copyright__ = "Copyright (c) 2017, Andres A. Perez Hortal, McGill University"
+__license__ = "BSD-3-Clause License, see LICENCE.txt for more details"
+__email__ = "andresperezcba@gmail.com"
+
+
 
 
 from setuptools import setup, find_packages
@@ -22,23 +30,22 @@ except ImportError:
     CythonPresent = False
     
 
+_thermodynamics_ExtensionArguments = dict(extra_compile_args = ['-fopenmp'],
+                                          extra_link_args = ['-fopenmp'] ,
+                                          include_dirs=[numpy.get_include()],
+                                          language='c++' 
+                                          )
 if CythonPresent:
     
     thermodynamicsLibExtension = Extension( "SkewTplus._thermodynamics",
                                             sources = ['SkewTplus/_thermodynamics.pyx'],
-                                            extra_compile_args = ['-fopenmp'],
-                                            extra_link_args = ['-fopenmp'] ,
-                                            include_dirs=[numpy.get_include()],
-                                            language='c++') 
+                                            **_thermodynamics_ExtensionArguments) 
                                            
     externalModules = cythonize([thermodynamicsLibExtension])                                       
 else:
     thermodynamicsLibExtension = Extension( "SkewTplus._thermodynamics",
                                             sources = ['SkewTplus/_thermodynamics.cpp'],
-                                            extra_compile_args = ['-fopenmp'],
-                                            extra_link_args = ['-fopenmp'] ,
-                                            include_dirs=[numpy.get_include()],
-                                            language='c++') 
+                                            **_thermodynamics_ExtensionArguments) 
     
     externalModules = [thermodynamicsLibExtension]
 

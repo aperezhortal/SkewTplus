@@ -45,7 +45,6 @@ package the reader must consult the :ref:`developer-reference`.
     developerReference/index
     license
     
-
 Dependencies
 ============
 
@@ -53,34 +52,82 @@ The SkewTplus package need the following dependencies
 
 * matplotlib
 * numpy
-* cython
-* libgcc
+* cython (optional)
+* netCDF4
 
 For running the examples:
 
 * Basemap
-* hdf4
-* netCDF4
-
-Installing SkewT
-================
 
 
-If all the dependencies are installed, to install the SkewTplus package
-you can download the tarball from the `github repository`_ and run::
+
+Installing SkewTplus
+====================
+
+PIP install
+-----------
+
+To install the package using **pip** the numpy package must be already installed.
+If is not installed, you can install it by running::
+    pip install numpy
+
+After the numpy package was installed, to install the SkewTplus package run::
+
+    pip install SkewTplus
+
+
+Install from source
+-------------------
+
+The latest version can be installed manually by downloading the sources from
+https://github.com/aperezhortal/SkewTplus
+
+To install the package manually, the numpy package must be already installed.
+If is not installed, you can install it by running::
+    pip install numpy
+    
+Then, you can install the SkewTplus package executing::
 
     python setup.py install
-    
-.. _`github repository`: https://github.com/aperezhortal/SkewTplus 
 
 If you want to put it somewhere different than your system files, you can do::
     
     python setup.py install --prefix=/path/to/local/dir
 
+IMPORTANT: If you install it using this way, all the dependencies need to be already installed! 
 
-Conda  install: hopefully coming soon
+Conda install
+-------------
+
+If you are using an anaconda environment, to install the package execute::
+    
+    conda install -c andresperezcba skewtplus
     
     
+
+Contributions
+===========
+
+SkewTplus is an open source software project.
+Contributions to the package are welcomed from all users.
+Feel free to suggest enhancements or report bugs by opening an issue in the github project page: 
+
+https://github.com/aperezhortal/SkewTplus/issues
+
+Thanks for using the SkewTplus package, for any feedback feel free to write to 
+andresperezcba AT gmail DOT com
+
+
+Code
+----
+
+The latest source code can be obtained with the command::
+
+    git clone https://github.com/aperezhortal/SkewTplus.git
+
+If you are planning on making changes that you would like included in SkewTplus,
+forking the repository is highly recommended.
+
 
 
 
