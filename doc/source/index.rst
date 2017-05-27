@@ -1,10 +1,24 @@
+.. meta::
+
+   :description  lang=en: The SkewTplus package provides tools to easily read 
+    atmospheric sounding data from different formats (University of Wyoming and ARM)
+    and create SkewT sounding plots along with parcel diagnostics (CAPE,CIN,etc.).
+   
+   :description  lang=es: El paquete SkewTplus provee herramientas para la facil manipulación
+    y lectura de datos de sondeos verticales en diferentes formatos (University of Wyoming and ARM)
+    y crear gráficos tipo SkewT de los sondeos verticales junto con los diagnosticos del sondeo (CAPE,CIN,etc.)
+    
+   :keywords: python, Skewt plot,skew-t plot, ARM sounding, University of Wyoming sounding
+
+
 =========================================================
 SkewTplus -- Atmospheric Profile Plotting and Diagnostics
 =========================================================
 
-SkewTplus provides a few useful tools to help with the plotting and analysis of 
-upper atmosphere data. In particular, it provides some useful classes to 
-handle the awkward skew-x projection.
+
+The SkewTplus package provides tools to easily read atmospheric sounding data from 
+different formats (University of Wyoming and ARM)
+and create SkewT sounding plots along with parcel diagnostics (CAPE,CIN,etc.).
         
 This package is based on the SkewT Python package developed by Thomas Chubb
 (https://pypi.python.org/pypi/SkewT/)
@@ -20,7 +34,7 @@ This new class allows a complete control over the Figure properties like
 multiple plots (normal axis and Skew-T axis).
 
 In addition, the **thermodynamics** module was improved.
-All the intensive computations were migrated to Cython and paralellized.
+All the intensive computations were migrated to Cython and parallelized.
    
 The SkewT Python package was a cornerstone of this project.  
 We are grateful to all its collaborators.
