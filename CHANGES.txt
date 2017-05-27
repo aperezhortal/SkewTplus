@@ -1,6 +1,10 @@
 Changelog
 =========
 
+Version 1.1.1
+-------------
+
+PKG-INFO and documentation updates 
 
 Version 1.1
 -----------
