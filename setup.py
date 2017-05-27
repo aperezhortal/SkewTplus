@@ -53,7 +53,7 @@ build_requires=['matplotlib','numpy','netCDF4 ']
 
 setup(
     name='SkewTplus',
-    version='1.1',
+    version='1.1.1',
     author = "Andres Perez Hortal",
     author_email = "andresperezcba@gmail.com",
     packages=find_packages(),
