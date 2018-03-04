@@ -42,8 +42,12 @@ The SkewTplus package need the following dependencies
 * numpy
 * cython (optional)
 * netCDF4
+* six
+* future (python2)
+* hdf4
+* libgcc >=5
 
-For running the examples:
+For running the WRF data example:
 
 * Basemap
 
