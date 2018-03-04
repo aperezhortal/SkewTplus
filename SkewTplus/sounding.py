@@ -2,8 +2,10 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 
-from builtins import (dict, object, str,
+from builtins import (dict, object, str, super,
                       open, zip)
+from six import string_types
+
 from datetime import datetime
 from html.parser import HTMLParser
 from os.path import isfile
@@ -71,7 +73,7 @@ class UW_HTMLParser(HTMLParser):
     def __init__(self):
         self.soundingData = list()
         self.lastEndTag = ''
-        super().__init__()
+        HTMLParser.__init__(self)
 
     def handle_endtag(self, tag):
         self.lastEndTag = tag
@@ -394,7 +396,7 @@ class sounding(object):
         """
         # Inspired in pymeteo.uwyo.py , fetch_from_web
         
-        if isinstance(soundingDate, str):
+        if isinstance(soundingDate, string_types):            
             soundingDate = datetime.strptime(soundingDate, "%Y%m%d:%H")
         
         base_url = "http://weather.uwyo.edu/cgi-bin/sounding"
