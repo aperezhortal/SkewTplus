@@ -1,10 +1,18 @@
 Changelog
 =========
 
+
+Version 1.1.2
+-------------
+
+* Bug correction: The sounding modul was not handing the string types correctly
+in python 2.7.
+
+
 Version 1.1.1
 -------------
 
-PKG-INFO and documentation updates 
+ * PKG-INFO and documentation updates 
 
 Version 1.1
 -----------
