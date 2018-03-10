@@ -49,7 +49,7 @@ else:
     
     externalModules = [thermodynamicsLibExtension]
 
-build_requires=['matplotlib','numpy','netCDF4 ']
+build_requires=['matplotlib','numpy','netCDF4', 'requests', 'six']
 
 setup(
     name='SkewTplus',

@@ -46,6 +46,7 @@ The SkewTplus package need the following dependencies
 * future (python2)
 * hdf4
 * libgcc >=5
+* requests
 
 For running the WRF data example:
 
@@ -55,6 +56,21 @@ For running the WRF data example:
 
 Installing SkewTplus
 ====================
+
+IMPORTANT - OSX installation
+----------------------------
+
+Before installing the package, be sure that Numpy is installed.
+Then, install the apple's Xcode application by running::
+    xcode-select --install
+
+Before running the pip or the python setup.py commands execute::
+    export CC=clang ; export CXX=clang
+
+Then you can continue with any of the following installation procedures. 
+Although **pip** is highly recommended.
+
+
 
 PIP install
 -----------
@@ -88,8 +104,9 @@ If you want to put it somewhere different than your system files, you can do::
 
 IMPORTANT: If you install it using this way, all the dependencies need to be already installed! 
 
-Conda install
--------------
+Conda install - Only available linux users
+------------------------------------------
+
 
 If you are using an anaconda environment, to install the package execute::
     
