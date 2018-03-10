@@ -64,11 +64,13 @@ Before installing the package, be sure that Numpy is installed.
 Then, install the apple's Xcode application by running::
     xcode-select --install
 
-Before running the pip or the python setup.py commands execute::
+Before running the pip or the setup commands execute::
+
     export CC=clang ; export CXX=clang
 
-Then you can continue with any of the following installation procedures. 
-Although **pip** is highly recommended.
+Then you can continue with any of the following installation procedures.
+ 
+Nevertheless **pip** is highly recommended.
 
 
 
