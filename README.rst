@@ -20,7 +20,7 @@ This new class allows a complete control over the Figure properties like
 multiple plots (normal axis and Skew-T axis).
 
 In addition, the **thermodynamics** module was improved.
-All the intensive computations were migrated to Cython and paralellized.
+All the intensive computations were migrated to Cython and parallelized.
    
 The SkewT Python package was a cornerstone of this project.  
 We are grateful to all its collaborators.
@@ -31,7 +31,7 @@ We are grateful to all its collaborators.
 Documentation
 =============
 
-Check the documentation at http://www.meteo.mcgill.ca/~aperez/SkewTplus/
+Check the documentation at http://skewtplus.readthedocs.io/en/latest/
 
 Dependencies
 ============
