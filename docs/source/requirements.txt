@@ -1,0 +1,3 @@
+# Required packages to build the documentation
+numpydoc
+sphinxcontrib-plantuml
