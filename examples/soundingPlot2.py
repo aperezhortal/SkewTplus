@@ -38,5 +38,7 @@ mySkewT_Axes1.addProfile(*mySounding2.getCleanSounding(),
                         label='Day 2', linestyle='--',loc='center right')
 
 # Show the figure
-mySkewT_Figure.show()
+mySkewT_Figure.show_plot()
 
+# Save the figure
+mySkewT_Figure.save_fig("Example1.png")

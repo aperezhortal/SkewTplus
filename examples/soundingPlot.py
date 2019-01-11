@@ -27,5 +27,8 @@ mySkewT_Axes.addProfile(pressure,temperature, dewPointTemperature ,
                         hPa=True, celsius=True, method=0, diagnostics=True, useVirtual=1)
  
 # Show the figure
-mySkewT_Figure.show()
+mySkewT_Figure.show_plot()
+
+# Save the figure
+mySkewT_Figure.save_fig("Example1.png")
 

@@ -63,7 +63,7 @@ mySkewT_Axes.addProfile(pressure,temperature, dewPointTemperature ,
                         hPa=True, celsius=True, method=0, diagnostics=True)
  
 # Show the figure
-mySkewT_Figure.show()
+mySkewT_Figure.show_figure()
 
 '''
 Plot two soundings in the same Skew-T diagram with out any parcel analysis
@@ -102,7 +102,7 @@ mySkewT_Axes1.addProfile(*mySounding2.getCleanSounding(),
                         label='Day 2', linestyle='--',loc='center right')
 
 # Show the figure
-mySkewT_Figure.show()
+mySkewT_Figure.show_figure()
 
 '''
 Two soundings comparison, with the

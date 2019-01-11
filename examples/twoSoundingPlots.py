@@ -48,5 +48,5 @@ mySkewT_Axes2.addProfile(pressure,temperature, dewPointTemperature ,
 mySkewT_Axes2.set_title("Day 2 Sounding") 
 
 # Show the figure
-mySkewT_Figure.show()
+mySkewT_Figure.show_figure()
 

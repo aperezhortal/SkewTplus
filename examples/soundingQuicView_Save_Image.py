@@ -11,5 +11,10 @@ from SkewTplus.sounding import sounding
 #Load the sounding datas
 mySounding = sounding("./exampleSounding.txt")
 
-# Show the SkewT diagram of the Sounding
-mySounding.quickPlot()
+# If no X server is available to visualize the plot, save it to file
+import matplotlib
+matplotlib.use('Agg')
+
+# Save the SkewT diagram of the Sounding
+mySounding.quickPlot(output_file="quick_sounding.pdf")
+
