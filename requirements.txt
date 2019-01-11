@@ -1,0 +1,6 @@
+matplotlib
+requests
+netCDF4
+six
+numpy
+cython
