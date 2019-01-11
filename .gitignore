@@ -3,7 +3,6 @@
 ###################
 *.o
 *.so
-*.cpp
 
 # Project configuration files
 #############################
