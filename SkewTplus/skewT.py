@@ -538,8 +538,6 @@ class SkewXAxes(Axes):
         self.yaxis.grid(True, ls='-', color='y', lw=0.5)
         majorLocatorDegC = MultipleLocator(10)
 
-        self.xaxis.set_major_locator(majorLocatorDegC)
-
         self.xaxis.grid(True, color='y', lw=0.5, ls='-')
 
         # self.set_ylabel('Pressure (hPa)')
@@ -557,6 +555,8 @@ class SkewXAxes(Axes):
 
         self.set_xlim(self.tmin, self.tmax)
         self.set_ylim(self.pmax, self.pmin)
+
+        self.xaxis.set_major_locator(majorLocatorDegC)
         # self.spines['right'].set_visible(False)
         # self.get_yaxis().set_tick_params(which="minor",left='off')
         # self.get_xaxis().set_tick_params(which="both", size=0)
@@ -730,6 +730,20 @@ def figure(*args, **kwargs):
 
     """
     my_figure = pyplot.figure(*args, **kwargs)
-    my_figure.show_plot = pyplot.show
-    my_figure.save_fig = pyplot.savefig
+
+    def show_plot(*args, **kwargs):
+        my_figure.canvas.draw()
+        my_figure.canvas.flush_events()
+        pyplot.show(*args, **kwargs)
+    my_figure.show_plot = show_plot
+
+    def save_fig(*args, **kwargs):
+        my_figure.canvas.draw()
+        my_figure.canvas.flush_events()
+        pyplot.savefig(*args, **kwargs)
+    my_figure.save_fig = save_fig
+
+
+
+
     return my_figure

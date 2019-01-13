@@ -2,8 +2,7 @@
 from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 
-from builtins import (dict, object, str, super,
-                      open, zip)
+from builtins import dict, object, str, open, zip
 from six import string_types
 
 from datetime import datetime
