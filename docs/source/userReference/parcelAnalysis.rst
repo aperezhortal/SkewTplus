@@ -86,9 +86,11 @@ For this example you need netCDF4 and Basemap packages installed::
     mySkewT_Axes.plot(parcelTemperature, pressure, linewidth=3, color='r' )
     
     # Add a marker for the LCL and the LFC
-    mySkewT_Axes.plot(myParcelAnalysis['temperatureAtLCL'], myParcelAnalysis['pressureAtLCL'], 
+    mySkewT_Axes.plot(myParcelAnalysis['temperatureAtLCL'],
+                      myParcelAnalysis['pressureAtLCL'],
                       marker='o', color='b' , label='LCL')
-    mySkewT_Axes.plot(myParcelAnalysis['temperatureAtLFC'], myParcelAnalysis['pressureAtLFC'], 
+    mySkewT_Axes.plot(myParcelAnalysis['temperatureAtLFC'],
+                      myParcelAnalysis['pressureAtLFC'],
                       marker='o', color='g' , label='LFC')
     
     # Add a legend
@@ -96,7 +98,7 @@ For this example you need netCDF4 and Basemap packages installed::
     
     mySkewT_Axes.set_title("Single Parcel Lifted adiabatically")
     
-    mySkewT_Figure.show()
+    mySkewT_Figure.show_plot()
 
 
 .. image:: ../img/parcelAnalysisExample.png

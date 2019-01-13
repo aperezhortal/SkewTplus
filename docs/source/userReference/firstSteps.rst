@@ -79,9 +79,9 @@ parcel analysis, and plot them side to side::
     
     
     # Extract the data from the Sounding 
-    pressure = mySounding1.soundingdata['pres']
-    temperature =  mySounding1.soundingdata['temp']
-    dewPointTemperature = mySounding1.soundingdata['dwpt']
+    pressure = mySounding1['pres']
+    temperature =  mySounding1['temp']
+    dewPointTemperature = mySounding1['dwpt']
     
     # Add a profile to the Skew-T diagram
     mySkewT_Axes1.addProfile(pressure,temperature, dewPointTemperature ,
@@ -94,9 +94,9 @@ parcel analysis, and plot them side to side::
     mySkewT_Axes2 = mySkewT_Figure.add_subplot(122, projection='skewx',tmin=-40)
     
     # Extract the data from the Sounding 
-    pressure = mySounding2.soundingdata['pres']
-    temperature =  mySounding2.soundingdata['temp']
-    dewPointTemperature = mySounding2.soundingdata['dwpt']
+    pressure = mySounding2['pres']
+    temperature =  mySounding2['temp']
+    dewPointTemperature = mySounding2['dwpt']
     
     # Add a profile to the Skew-T diagram
     mySkewT_Axes2.addProfile(pressure,temperature, dewPointTemperature ,
@@ -105,7 +105,7 @@ parcel analysis, and plot them side to side::
     mySkewT_Axes2.set_title("Day 2 Sounding") 
     
     # Show the figure
-    mySkewT_Figure.show()
+    mySkewT_Figure.show_plot()
 
 .. image:: ../img/twoSoundingsPlots.png
 

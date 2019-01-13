@@ -9,7 +9,7 @@ package are described in greater detail.
 
 In the following example show how to plot two soundings in the same
 Skew-T diagram without any parcel analysis::
-        
+
     from SkewTplus.skewT import figure
     from SkewTplus.sounding import sounding
     
@@ -42,7 +42,7 @@ Skew-T diagram without any parcel analysis::
                             label='Day 2', linestyle='--',loc='center right')
     
     # Show the figure
-    mySkewT_Figure.show()
+    mySkewT_Figure.show_plot()
 
 .. image:: ../img/soundingPlot2.png
 

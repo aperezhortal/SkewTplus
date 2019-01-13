@@ -113,7 +113,7 @@ The Temperature should be in Celsius degrees and the pressure in hPa.
 
 The next is an example of a dictionary initialization used to plot a sounding from a WRF
 output file::
-    
+
     from netCDF4 import Dataset
     import numpy
     from SkewTplus.sounding import sounding

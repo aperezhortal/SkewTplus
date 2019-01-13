@@ -11,22 +11,19 @@ or 4D=(3D + time) ones (time, height, latitude or y, longitude or x].
 
 Here is an example for computing CAPE from a WRF output file and plot the values
 as a color plot over a map::
-     
-    
+
     from mpl_toolkits.basemap import Basemap
     from netCDF4 import Dataset
     import numpy
     
     from SkewTplus.thermodynamics import parcelAnalysis
     import matplotlib.pyplot as plt
-    
-    
+
     #Load the WRF File
     wrfOutputFile = Dataset("wrfOutputExample.nc")
     
     theta = wrfOutputFile.variables["T"][:] + 300 # Potential temperature
     pressure = wrfOutputFile.variables['P'][:] + wrfOutputFile.variables['PB'][:]
-    
     
     qvapor = wrfOutputFile.variables['QVAPOR'][:]
     
