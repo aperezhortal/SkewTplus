@@ -74,7 +74,7 @@ mySkewT_Axes.legend(loc='center right')
 
 mySkewT_Axes.set_title("Single Parcel Lifted adiabatically")
 
-mySkewT_Figure.show()
+mySkewT_Figure.show_plot()
 
 
 
