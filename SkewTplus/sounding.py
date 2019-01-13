@@ -159,10 +159,6 @@ class sounding(object):
     
     """
 
-    missingValue = -9999.
-
-    _soundingData = dict()
-
     def __init__(self, inputData=None, fileFormat=None, stationId=None):
         """
         Sounding Initialization
@@ -213,6 +209,9 @@ class sounding(object):
             
         """
 
+        self._soundingData = dict()
+        self.missingValue = -9999.
+
         self.addField('StationNumber', '(No Number)')
         self.addField('SoundingDate', '(No Date)')
 
@@ -230,7 +229,6 @@ class sounding(object):
 
                     if fileFormat is None:
                         # Try automatic detection of file format
-
                         try:
                             self.fetchFromARMFile(inputData)
                         except OSError:
@@ -238,7 +236,6 @@ class sounding(object):
                             self.fetchFromTxtFile(inputData)
 
                     else:
-
                         # If the argument is an string assume that is
                         # in the university of wyoming format 
                         if fileFormat.lower() in ('txt', "wrf", "uw", "wyoming"):
