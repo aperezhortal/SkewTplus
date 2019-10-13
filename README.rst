@@ -2,29 +2,19 @@
 SkewTplus -- Atmospheric Profile Plotting and Diagnostics
 =========================================================
 
-SkewTplus provides a few useful tools to help with the plotting and analysis of 
-upper atmosphere data. In particular, it provides some useful classes to 
-handle the awkward skew-x projection.
+SkewTplus provides useful tools for plotting and analyzing atmospheric sounding data.
+In particular, it provides useful classes to handle the awkward skew-x projection.
         
 This package is based on the SkewT Python package developed by Thomas Chubb
 (https://pypi.python.org/pypi/SkewT/)
-        
-The main difference with the original *SkewT package* is that the vertical soundings 
-plots are handled by a special class (SkewT).
-The new *SkewT* class extends the base
-`matplolib's Figure <http://matplotlib.org/api/figure_api.html?highlight=figure#module-matplotlib.figure>`_
-class with an interface similar to 
-`matplolib's pyplot <http://matplotlib.org/api/pyplot_api.html>`_.
-It also allows to create Skew-T type plots in a simple way.
-This new class allows a complete control over the Figure properties like
-multiple plots (normal axis and Skew-T axis).
 
-In addition, the **thermodynamics** module was improved.
+This package is based on the SkewT Python package developed by Thomas Chubb.
+The vertical soundings plots are handled by a new class (SkewT) that provides an
+interface similar to the `matplolib's pyplot <http://matplotlib.org/api/pyplot_api.html>`_ api.
+This new class allows more control over the Figure properties like multiple plots (normal axis and Skew-T axis).
+
+Also, the **thermodynamics** module was improved.
 All the intensive computations were migrated to Cython and parallelized.
-   
-The SkewT Python package was a cornerstone of this project.  
-We are grateful to all its collaborators.
-
 
 *Technology builds on technology*
 
@@ -94,6 +84,7 @@ https://github.com/aperezhortal/SkewTplus
 
 To install the package manually, the numpy package must be already installed.
 If is not installed, you can install it by running::
+
     pip install numpy
     
 Then, you can install the SkewTplus package executing::
@@ -109,7 +100,6 @@ IMPORTANT: If you install it using this way, all the dependencies need to be alr
 Conda install - Only available linux users
 ------------------------------------------
 
-
 If you are using an anaconda environment, to install the package execute::
     
     conda install -c andresperezcba skewtplus
@@ -123,9 +113,6 @@ Contributions to the package are welcomed from all users.
 Feel free to suggest enhancements or report bugs by opening an issue in the github project page: 
 
 https://github.com/aperezhortal/SkewTplus/issues
-
-Thanks for using the SkewTplus package, for any feedback feel free to write to 
-andresperezcba AT gmail DOT com
 
 
 Code
