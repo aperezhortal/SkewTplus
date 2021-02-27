@@ -6,9 +6,7 @@ SkewTplus provides useful tools for plotting and analyzing atmospheric sounding 
 In particular, it provides useful classes to handle the awkward skew-x projection.
         
 This package is based on the SkewT Python package developed by Thomas Chubb
-(https://pypi.python.org/pypi/SkewT/)
-
-This package is based on the SkewT Python package developed by Thomas Chubb.
+(https://pypi.python.org/pypi/SkewT/).
 The vertical soundings plots are handled by a new class (SkewT) that provides an
 interface similar to the `matplolib's pyplot <http://matplotlib.org/api/pyplot_api.html>`_ api.
 This new class allows more control over the Figure properties like multiple plots (normal axis and Skew-T axis).
@@ -23,8 +21,11 @@ Documentation
 
 Check the documentation at http://skewtplus.readthedocs.io/en/latest/
 
+Installing SkewTplus
+====================
+
 Dependencies
-============
+------------
 
 The SkewTplus package need the following dependencies
 
@@ -43,12 +44,8 @@ For running the WRF data example:
 * Basemap
 
 
-
-Installing SkewTplus
-====================
-
 OSX users: GNU gcc compiler installation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------
 
 (Adapted from the `Pysteps installation instructions <https://pysteps.readthedocs.io/en/latest/user_guide/install_pysteps.html#osx-users>`_)
 
@@ -126,7 +123,7 @@ IMPORTANT: If you install it using this way, all the dependencies need to be alr
 
 
 Contributions
-===========
+=============
 
 SkewTplus is an open source software project.
 Contributions to the package are welcomed from all users.
