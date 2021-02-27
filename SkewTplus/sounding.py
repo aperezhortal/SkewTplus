@@ -1,6 +1,5 @@
 # For python 3 portability
-from __future__ import (absolute_import, division,
-                        print_function, unicode_literals)
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 from builtins import dict, object, str, open, zip
 from six import string_types
@@ -13,53 +12,62 @@ from tempfile import NamedTemporaryFile
 from netCDF4 import Dataset
 from numpy import ndarray
 import numpy
-from numpy.ma.core import mask_or, masked_values, \
-    masked_invalid, getmaskarray, MaskedArray
+from numpy.ma.core import (
+    mask_or,
+    masked_values,
+    masked_invalid,
+    getmaskarray,
+    MaskedArray,
+)
 import requests
 
 from SkewTplus.errorHandling import fatalError
 from SkewTplus.skewT import figure
 
 # Long names from the TXT University of Wyoming soundings
-_txtSoundingLongNames = {'pres': 'Pressure',
-                         'hght': 'Height',
-                         'alt': 'Height',
-                         'temp': 'Temperature',
-                         'dwpt': 'Dew Point Temperature',
-                         'relh': 'Relative Humidity',
-                         'mixr': 'Vapor Mixing Ratio',
-                         'drct': 'Wind Direction',
-                         'sknt': 'Wind Speed',
-                         'thta': 'Potential Temperature',
-                         'thte': 'Equivalent Potential Temperature',
-                         'thtv': 'Virtual Potential Temperature'}
+_txtSoundingLongNames = {
+    "pres": "Pressure",
+    "hght": "Height",
+    "alt": "Height",
+    "temp": "Temperature",
+    "dwpt": "Dew Point Temperature",
+    "relh": "Relative Humidity",
+    "mixr": "Vapor Mixing Ratio",
+    "drct": "Wind Direction",
+    "sknt": "Wind Speed",
+    "thta": "Potential Temperature",
+    "thte": "Equivalent Potential Temperature",
+    "thtv": "Virtual Potential Temperature",
+}
 
 #: Dictionary with fields abbreviations ( abbreviation , full field name )
-#: All the abbreviations are case insensitive.                   
-abbreviations = {'pres': 'pressure',
-                 'hght': 'height',
-                 'alt': 'height',
-                 't': 'temperature',
-                 'temp': 'temperature',
-                 'dwpt': 'dewPointTemperature',
-                 'dp': 'dewPointTemperature',
-                 'relh': 'relativeHumidity',
-                 'rh': 'relativeHumidity',
-                 'mixr': 'vaporMixingRatio',
-                 'drct': 'windDirection',
-                 'sknt': 'windSpeed',
-                 'thta': 'potentialTemperature',
-                 'thte': 'equivalentPotentialTemperature',
-                 'thtv': 'virtualPotentialTemperature',
-                 'tdry': 'temperature',
-                 'wspd': 'windSpeed',
-                 'deg': 'windDirection',
-                 'v_wind': 'vWind',
-                 'u_wind': 'uWind',
-                 'asc': 'ascentRate',
-                 'lat': 'latitude',
-                 'lon': 'longitude',
-                 'wstat': 'windStatus'}
+#: All the abbreviations are case insensitive.
+abbreviations = {
+    "pres": "pressure",
+    "hght": "height",
+    "alt": "height",
+    "t": "temperature",
+    "temp": "temperature",
+    "dwpt": "dewPointTemperature",
+    "dp": "dewPointTemperature",
+    "relh": "relativeHumidity",
+    "rh": "relativeHumidity",
+    "mixr": "vaporMixingRatio",
+    "drct": "windDirection",
+    "sknt": "windSpeed",
+    "thta": "potentialTemperature",
+    "thte": "equivalentPotentialTemperature",
+    "thtv": "virtualPotentialTemperature",
+    "tdry": "temperature",
+    "wspd": "windSpeed",
+    "deg": "windDirection",
+    "v_wind": "vWind",
+    "u_wind": "uWind",
+    "asc": "ascentRate",
+    "lat": "latitude",
+    "lon": "longitude",
+    "wstat": "windStatus",
+}
 
 
 class UW_HTMLParser(HTMLParser):
@@ -67,7 +75,7 @@ class UW_HTMLParser(HTMLParser):
 
     def __init__(self):
         self.soundingData = list()
-        self.lastEndTag = ''
+        self.lastEndTag = ""
         HTMLParser.__init__(self)
 
     def handle_endtag(self, tag):
@@ -75,45 +83,45 @@ class UW_HTMLParser(HTMLParser):
 
     def handle_data(self, data):
 
-        if self.lasttag.lower() in 'pre' and self.lastEndTag != 'pre':
+        if self.lasttag.lower() in "pre" and self.lastEndTag != "pre":
             self.soundingData.append(data)
-        elif self.lasttag.lower() in 'h2' and self.lastEndTag != 'h2':
+        elif self.lasttag.lower() in "h2" and self.lastEndTag != "h2":
             self.soundingData.append(data)
 
 
 class soundingArray(MaskedArray):
     """
     Class used to store the vertical sounding data arrays (MaskedArray_ with metadata)
-    
+
     .. _MaskedArray: https://docs.scipy.org/doc/numpy/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray
-    
+
     The class is a Masked array with extra attributes. These attributes are optional:
-    
+
     For more information about masked arrays see:
     https://docs.scipy.org/doc/numpy/reference/maskedarray.html
-    
-    
-    
+
+
+
     Attributes
     ----------
-    
+
     longName : str
         Long name o the field value
-    
-    units : str    
+
+    units : str
         Units of the data values
-        
+
     missingValue : float
-        Missing data value. 
+        Missing data value.
     """
 
     # Return a new instance of the class
     def __new__(cls, *args, **kwargs):
         # Input array is an already formed ndarray instance
 
-        longName = kwargs.pop('longName', None)
-        units = kwargs.pop('units', None)
-        missingValue = kwargs.pop('missingValue', -9999.)
+        longName = kwargs.pop("longName", None)
+        units = kwargs.pop("units", None)
+        missingValue = kwargs.pop("missingValue", -9999.0)
 
         obj = MaskedArray.__new__(cls, *args, **kwargs)
 
@@ -130,90 +138,90 @@ class soundingArray(MaskedArray):
 class sounding(object):
     """
     Class used to store Sounding data.
-    
+
     It support quick initialization from txt files (WRF and University of Wyoming format),
     ARM sounding Netcdf files, or initialize from data in a dictionary.
     In addition the all the field can be loaded manually into the class by using the method
     :py:meth:`addField`.
-    
+
     The data fields stored in the instance can be accessed like the elements of the dictionary
     using the [] (indexer) operators. For example::
-    
+
         pressure = mySounding['pressure']
-    
+
     In case that the field doesn't exist a :py:class:`~SkewTplus.errorHandling.fatalError`
     exception is raised.
-    
+
     Several variable names abbreviations are supported. See :py:attr:`SkewTplus.sounding.abbreviations`.
     All the abbreviations are case insensitive.
-    
+
     In addition, an iterator was implemented to access sequentially to all the fields
-    and their corresponding values. For example to print all the fields stored and their corresponding 
+    and their corresponding values. For example to print all the fields stored and their corresponding
     type is as simple as::
         mySounding = sounding('soundingExampleFile.txt')
         for fieldName, fieldValue in mySounding:
             print(fieldName , type(fieldValue))
-    
-    The list of the field names stored in the class can be retrieved with the 
+
+    The list of the field names stored in the class can be retrieved with the
     :py:meth:`fields` method.
-    
+
     """
 
     def __init__(self, inputData=None, fileFormat=None, stationId=None):
         """
         Sounding Initialization
-        
+
         It supports 4 types of initialization:
-            
+
         * From a University of Wyoming txt file
         * From a University of Wyoming Website
         * Form an ARM sounding Netcdf file
         * From a dictionary with the field names, field values pairs
-        
+
         All the field are added trough the :py:meth:`addField` method.
         The fields names support abbreviations when they are set or get.
         But internally the field names stored are not abbreviated.
         See :py:attr:`SkewT.sounding.abbreviations`.
-        
-        If the fileFormat keyword is not specified, it is assumed that 
+
+        If the fileFormat keyword is not specified, it is assumed that
         the input data correspond to a filePath and it will try determine the
         format automatically.
-        
+
         .. _datetime:`https://docs.python.org/2/library/datetime.html`
-        
+
         Parameters
         ----------
-        
+
         inputData : str, datetime_ or dict
             If inputData is a dictionary, the sounding fields are taken from the
             dictionary (field names, field values pairs).
-            
+
             If fileFormat is "web", then the inputData is considered the date of the sounding.
             See :py:meth:fetchFromWeb for date input format.
             Otherwise, if inputData is an string, it is considered a file path.
             If fileFormat is None (default) the initialization will
             try to automatically detect the file format.
-        
-            If inputData is None, the create instance correspond to an empty sounding. 
-            
-        
+
+            If inputData is None, the create instance correspond to an empty sounding.
+
+
         fileFormat : str
             File format. Supported values:
             * 'txt', "wrf", "uw or "wyoming" : University of Wyoming
             * "netcdf", "arm" : ARM netcdf soundings
             * 'web' : University of Wyoming website
-        
+
         stationId : str
             Station ID. Used only when "web" is selected as format. See :py:meth:fetchFromWeb
             for more details.
-            
+
         """
 
         self._soundingData = dict()
-        self.missingValue = -9999.
+        self.missingValue = -9999.0
 
-        self.addField('StationNumber', '(No Number)')
-        self.addField('SoundingDate', '(No Date)')
+        self.addField("StationNumber", "(No Number)")
+        self.addField("SoundingDate", "(No Date)")
 
         if inputData is not None:
 
@@ -237,16 +245,18 @@ class sounding(object):
 
                     else:
                         # If the argument is an string assume that is
-                        # in the university of wyoming format 
-                        if fileFormat.lower() in ('txt', "wrf", "uw", "wyoming"):
+                        # in the university of wyoming format
+                        if fileFormat.lower() in ("txt", "wrf", "uw", "wyoming"):
                             self.fetchFromTxtFile(inputData)
-                        elif fileFormat.lower() in ('netcdf', 'arm'):
+                        elif fileFormat.lower() in ("netcdf", "arm"):
                             self.fetchFromARMFile(inputData)
                         else:
-                            raise fatalError("Error loading Sounding",
-                                             "Selected format not supported:%s" % fileFormat,
-                                             "Accepted formats:%s" % str(('txt', "wrf", "uw", "wyoming", "netcdf")))
-
+                            raise fatalError(
+                                "Error loading Sounding",
+                                "Selected format not supported:%s" % fileFormat,
+                                "Accepted formats:%s"
+                                % str(("txt", "wrf", "uw", "wyoming", "netcdf")),
+                            )
 
                 elif isinstance(inputData, dict):
                     for fieldName, fieldValue in inputData.items():
@@ -259,10 +269,11 @@ class sounding(object):
                         else:
                             self.addField(fieldName, fieldValue)
 
-
                 else:
-                    raise fatalError("Input Data not supported",
-                                     "type(inputData)=%s" % str(type(inputData)))
+                    raise fatalError(
+                        "Input Data not supported",
+                        "type(inputData)=%s" % str(type(inputData)),
+                    )
 
     def setMissingValue(self, missingValue):
         """ Set the missing data value"""
@@ -270,7 +281,7 @@ class sounding(object):
 
     def _getFieldName(self, fieldName, exact=False):
         """
-        Get the non-abbreviated file name. See 
+        Get the non-abbreviated file name. See
         :py:attr:`abbreviations` for available abbreviations
         """
 
@@ -287,34 +298,34 @@ class sounding(object):
     def addField(self, fieldName, fieldValue, longName=None, units=None, **kwargs):
         """
         Add a field to the sounding
-        
+
         .. _ndarray: http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.htm
-        
+
         Parameters
         ----------
-        
+
         fieldName : str
-            Name of the field to be added. It supports abbreviations 
+            Name of the field to be added. It supports abbreviations
             (see :py:attr:`abbreviations`)
-        
+
         fieldValue : any
             Corresponding field value. If the field value is an ndarray_  then
-            it will be converted to a :py:class:`~SkewTplus.sounding.soundingArray` with the corresponding 
+            it will be converted to a :py:class:`~SkewTplus.sounding.soundingArray` with the corresponding
             metadata.
-            
+
         longName : str, optional
             Long name of the field
-            
+
         units : str , optional
             units of the field
-        
+
         missingValue : float, optional
             Value for missing data. Occurrences of this value will be masked.
-            The default missingValue can be change with :py:meth:`setMissingValue` 
-       
+            The default missingValue can be change with :py:meth:`setMissingValue`
+
         """
 
-        missingValue = kwargs.pop('missingValue', self.missingValue)
+        missingValue = kwargs.pop("missingValue", self.missingValue)
 
         fieldName = self._getFieldName(fieldName)
 
@@ -323,10 +334,9 @@ class sounding(object):
             _fieldValue = masked_invalid(fieldValue)
             _fieldValue = masked_values(_fieldValue, missingValue)
             _fieldValue.harden_mask()
-            self._soundingData[fieldName] = soundingArray(_fieldValue,
-                                                          longName=longName,
-                                                          units=units,
-                                                          missingValue=missingValue)
+            self._soundingData[fieldName] = soundingArray(
+                _fieldValue, longName=longName, units=units, missingValue=missingValue
+            )
 
         else:
             self._soundingData[fieldName] = fieldValue
@@ -346,19 +356,19 @@ class sounding(object):
     def fetchFromWeb(self, soundingDate, stationId):
         """
         Load University of Wyoming sound data from the uwyo website
-        
+
         .. _datetime:`https://docs.python.org/2/library/datetime.html`
-        
+
         Parameters
         ----------
-         
+
         soundingDate : str or datetime_
             Date of the selected sounding to download. The date could be a datetime_ object
             or an string. The string should have the following format: "%Y%m%d:%H"
-            
+
         stationId : str
             Station ID
-            
+
         """
         # Inspired in pymeteo.uwyo.py , fetch_from_web
 
@@ -367,41 +377,44 @@ class sounding(object):
 
         base_url = "http://weather.uwyo.edu/cgi-bin/sounding"
 
-        payload = {'TYPE': r'TEXT:LIST',
-                   'YEAR': soundingDate.strftime("%Y"),
-                   'MONTH': soundingDate.strftime("%m"),
-                   'FROM': soundingDate.strftime("%d%H"),
-                   'TO': soundingDate.strftime("%d%H"),
-                   'STNM': stationId}
+        payload = {
+            "TYPE": r"TEXT:LIST",
+            "YEAR": soundingDate.strftime("%Y"),
+            "MONTH": soundingDate.strftime("%m"),
+            "FROM": soundingDate.strftime("%d%H"),
+            "TO": soundingDate.strftime("%d%H"),
+            "STNM": stationId,
+        }
 
         myresponse = requests.get(base_url, params=payload)
 
         if "Can't get" in myresponse.text:
-            raise fatalError("Error retrieving sounding from UW web page.",
-                             "Observations not present for that station or that date",
-                             "Check the date and the station name",
-                             "Selected Station ID:%s" % stationId,
-                             "Selected Date:%s" % soundingDate.strftime("%Y%m%d:%H")
-                             )
+            raise fatalError(
+                "Error retrieving sounding from UW web page.",
+                "Observations not present for that station or that date",
+                "Check the date and the station name",
+                "Selected Station ID:%s" % stationId,
+                "Selected Date:%s" % soundingDate.strftime("%Y%m%d:%H"),
+            )
         else:
             parsedResponse = UW_HTMLParser()
             parsedResponse.feed(myresponse.text)
 
-            with NamedTemporaryFile(mode='w') as tempFile:
+            with NamedTemporaryFile(mode="w") as tempFile:
                 tempFile.write("\n".join(parsedResponse.soundingData))
                 self.fetchFromTxtFile(tempFile.name)
 
     def fetchFromTxtFile(self, filePath, headerLength=6):
         """
         Reads the raw profile data from a University of Wyoming sounding file.
-        
+
         Notes
         -----
         1. Data can be downloaded from http://weather.uwyo.edu/upperair/sounding.html
-        2. The input file has to conform *Exactly* to the University of 
-           Wyoming file format. 
-        3. The diagnostics at the end of the file are ignored.        
-           
+        2. The input file has to conform *Exactly* to the University of
+           Wyoming file format.
+        3. The diagnostics at the end of the file are ignored.
+
         """
 
         # Now this class uses Numpy's genfromtxt function to read the TXT files,
@@ -416,7 +429,7 @@ class sounding(object):
                 value = False
             return value
 
-        with open(filePath, 'r') as fileHandler:
+        with open(filePath, "r") as fileHandler:
             lines = fileHandler.readlines()
 
             # New: handle whitespace at top of file if present
@@ -429,29 +442,34 @@ class sounding(object):
             # Handle the file header
             # First line for WRF profiles differs from the UWYO soundings
             header = lines[0]
-            if header[:5] == '00000':
+            if header[:5] == "00000":
                 # WRF profile
-                self.addField('StationNumber', '00000')
-                self.addField('Longitude', float(header.split()[5].strip(",")))
-                self.addField('Latitude', float(header.split()[6]))
-                self.addField('SoundingDate', header.split()[-1])
+                self.addField("StationNumber", "00000")
+                self.addField("Longitude", float(header.split()[5].strip(",")))
+                self.addField("Latitude", float(header.split()[6]))
+                self.addField("SoundingDate", header.split()[-1])
             else:
-                self.addField('StationNumber', header[:5])
-                dstr = (' ').join(header.split()[-4:])
+                self.addField("StationNumber", header[:5])
+                dstr = (" ").join(header.split()[-4:])
                 soundingDate = datetime.strptime(dstr, "%HZ %d %b %Y")
-                self.addField('SoundingDate', soundingDate.strftime("%Y-%m-%d_%H:%M:%S"))
+                self.addField(
+                    "SoundingDate", soundingDate.strftime("%Y-%m-%d_%H:%M:%S")
+                )
 
             fieldsNames = lines[headerLength - 3].split()
             filedsUnits = lines[headerLength - 2].split()
 
             arePressureValues = [isValidValue(_line[0:7]) for _line in lines]
 
-            fieldsData = numpy.genfromtxt(filePath, unpack=True,
-                                          skip_header=headerLength + offset,
-                                          max_rows=numpy.argwhere(arePressureValues).max() - headerLength + 1,
-                                          delimiter=7,
-                                          usemask=True,
-                                          missing_values=self.missingValue)
+            fieldsData = numpy.genfromtxt(
+                filePath,
+                unpack=True,
+                skip_header=headerLength + offset,
+                max_rows=numpy.argwhere(arePressureValues).max() - headerLength + 1,
+                delimiter=7,
+                usemask=True,
+                missing_values=self.missingValue,
+            )
 
         for fieldName, fieldValues, units in zip(fieldsNames, fieldsData, filedsUnits):
             # Set mask for missing data
@@ -460,32 +478,53 @@ class sounding(object):
 
             fieldValues.harden_mask()
 
-            self.addField(fieldName, fieldValues,
-                          units=units, missingValue=self.missingValue,
-                          longName=_txtSoundingLongNames[fieldName.lower()])
+            self.addField(
+                fieldName,
+                fieldValues,
+                units=units,
+                missingValue=self.missingValue,
+                longName=_txtSoundingLongNames[fieldName.lower()],
+            )
 
     def fetchFromARMFile(self, filePath):
         """
-        Reads the raw profile data from a ARM sounding file (Netcdf file).        
+        Reads the raw profile data from a ARM sounding file (Netcdf file).
         """
 
         armNetcdfFile = Dataset(filePath, mode="r")
-        self.setMissingValue(-9999.)
+        self.setMissingValue(-9999.0)
 
         try:
             # The ARM field names must be in the _abbreviations attribute
-            for field in ['pres', 'tdry', 'dp', 'wspd', 'deg', 'rh', 'u_wind',
-                          'v_wind', 'wstat', 'asc', 'lat', 'lon', 'alt']:
+            for field in [
+                "pres",
+                "tdry",
+                "dp",
+                "wspd",
+                "deg",
+                "rh",
+                "u_wind",
+                "v_wind",
+                "wstat",
+                "asc",
+                "lat",
+                "lon",
+                "alt",
+            ]:
 
                 _variable = armNetcdfFile[field]
                 if hasattr(_variable, "missing_value"):
                     missingValue = _variable.missing_value
                 else:
-                    missingValue = -9999.
+                    missingValue = -9999.0
 
-                self.addField(field, _variable[:],
-                              units=_variable.units, missingValue=missingValue,
-                              longName=_variable.long_name)
+                self.addField(
+                    field,
+                    _variable[:],
+                    units=_variable.units,
+                    missingValue=missingValue,
+                    longName=_variable.long_name,
+                )
         except:
             raise
 
@@ -501,28 +540,30 @@ class sounding(object):
         return self.__soundingData.keys()
 
     def getCleanSounding(self):
-        """  
+        """
         Clean the sounding, when Temperature or pressure has a missing values,
         removing that pressure level.
-        
+
         It returns the pressure in Pa and temperatures in Celsius
         """
 
-        pressure = self['pressure']
-        temperature = self['temperature']
+        pressure = self["pressure"]
+        temperature = self["temperature"]
 
-        dewPointTemperature = self['dewPointTemperature']
+        dewPointTemperature = self["dewPointTemperature"]
         dewPointTemperature[getmaskarray(dewPointTemperature)] = self.missingValue
 
         if pressure.units is not None:
-            if pressure.units.lower() == 'hpa':
+            if pressure.units.lower() == "hpa":
                 hPa = True
-            elif pressure.units.lower() == 'pa':
+            elif pressure.units.lower() == "pa":
                 hPa = False
             else:
-                raise fatalError("Error getting clean sounding plot",
-                                 "Pressure units not supported:%s" % pressure.units,
-                                 "Supported: hPa or Pa ")
+                raise fatalError(
+                    "Error getting clean sounding plot",
+                    "Pressure units not supported:%s" % pressure.units,
+                    "Supported: hPa or Pa ",
+                )
         else:
             hPa = True
 
@@ -530,18 +571,22 @@ class sounding(object):
 
             if dewPointTemperature.units is not None:
                 if temperature.units.lower() != dewPointTemperature.units.lower():
-                    raise fatalError("Error getting clean sounding plot",
-                                     "Temperature units: %s" % temperature.units,
-                                     "Dew Point Temp: %s" % dewPointTemperature.units)
+                    raise fatalError(
+                        "Error getting clean sounding plot",
+                        "Temperature units: %s" % temperature.units,
+                        "Dew Point Temp: %s" % dewPointTemperature.units,
+                    )
 
-            if temperature.units.lower() == 'c':
+            if temperature.units.lower() == "c":
                 celsius = True
-            elif temperature.units.lower() == 'k':
+            elif temperature.units.lower() == "k":
                 celsius = False
             else:
-                raise fatalError("Error getting clean sounding plot",
-                                 "Temperature units not supported:%s" % temperature.units,
-                                 "Supported: C or K ")
+                raise fatalError(
+                    "Error getting clean sounding plot",
+                    "Temperature units not supported:%s" % temperature.units,
+                    "Supported: C or K ",
+                )
         else:
             celsius = True
 
@@ -554,11 +599,16 @@ class sounding(object):
 
         if celsius:
             _temperature = temperature.data[mask]
-            _dewPointTemperature = masked_values(dewPointTemperature.data[mask], self.missingValue)
+            _dewPointTemperature = masked_values(
+                dewPointTemperature.data[mask], self.missingValue
+            )
 
         else:
             _temperature = temperature.data[mask] - 273.15
-            _dewPointTemperature = masked_values(dewPointTemperature.data[mask], self.missingValue) - 273.15
+            _dewPointTemperature = (
+                masked_values(dewPointTemperature.data[mask], self.missingValue)
+                - 273.15
+            )
 
         return (_pressure, _temperature, _dewPointTemperature)
 
@@ -567,13 +617,20 @@ class sounding(object):
         my_skew_t_figure = figure()
 
         # Add an Skew-T axes to the Figure
-        my_skew_t_axes = my_skew_t_figure.add_subplot(111, projection='skewx', **kwargs)
+        my_skew_t_axes = my_skew_t_figure.add_subplot(111, projection="skewx", **kwargs)
 
         pressure, temperature, dew_point_temperature = self.getCleanSounding()
 
         # Add a profile to the Skew-T diagram
-        my_skew_t_axes.addProfile(pressure, temperature, dew_point_temperature,
-                                  hPa=True, celsius=True, method=0, diagnostics=True)
+        my_skew_t_axes.addProfile(
+            pressure,
+            temperature,
+            dew_point_temperature,
+            hPa=True,
+            celsius=True,
+            method=0,
+            diagnostics=True,
+        )
 
         if output_file is not None:
             # Save the figure
