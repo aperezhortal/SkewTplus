@@ -13,8 +13,7 @@ The behavior of the pyplot **show** method is now part of the Figure class.
 """
 
 # For python 3 portability
-from __future__ import (absolute_import, division,
-                        print_function, unicode_literals)
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import matplotlib.axis as maxis
 import matplotlib.spines as mspines
@@ -27,12 +26,29 @@ from matplotlib.axes import Axes
 from matplotlib.projections import register_projection
 from matplotlib.projections import register_projection
 from matplotlib.ticker import MultipleLocator, ScalarFormatter
-from numpy import array, linspace, log, \
-    where, concatenate, log10, logspace, zeros, logical_or
+from numpy import (
+    array,
+    linspace,
+    log,
+    where,
+    concatenate,
+    log10,
+    logspace,
+    zeros,
+    logical_or,
+)
 from numpy.ma.core import masked_invalid, masked_array, getmaskarray
 
-from SkewTplus.thermodynamics import degCtoK, Rs_da, Cp_da, moistAscent, \
-    liftParcel, parcelAnalysis, virtualTemp3, virtualTemp4
+from SkewTplus.thermodynamics import (
+    degCtoK,
+    Rs_da,
+    Cp_da,
+    moistAscent,
+    liftParcel,
+    parcelAnalysis,
+    virtualTemp3,
+    virtualTemp4,
+)
 
 
 # The sole purpose of this class is to look at the upper, lower, or total
@@ -44,21 +60,24 @@ class SkewXTick(maxis.XTick):
         # restore these states (`set_visible`) at the end of the block (after
         # the draw).
         with ExitStack() as stack:
-            for artist in [self.gridline, self.tick1line, self.tick2line,
-                           self.label1, self.label2]:
+            for artist in [
+                self.gridline,
+                self.tick1line,
+                self.tick2line,
+                self.label1,
+                self.label2,
+            ]:
                 stack.callback(artist.set_visible, artist.get_visible())
             needs_lower = transforms.interval_contains(
-                self.axes.lower_xlim, self.get_loc())
+                self.axes.lower_xlim, self.get_loc()
+            )
             needs_upper = transforms.interval_contains(
-                self.axes.upper_xlim, self.get_loc())
-            self.tick1line.set_visible(
-                self.tick1line.get_visible() and needs_lower)
-            self.label1.set_visible(
-                self.label1.get_visible() and needs_lower)
-            self.tick2line.set_visible(
-                self.tick2line.get_visible() and needs_upper)
-            self.label2.set_visible(
-                self.label2.get_visible() and needs_upper)
+                self.axes.upper_xlim, self.get_loc()
+            )
+            self.tick1line.set_visible(self.tick1line.get_visible() and needs_lower)
+            self.label1.set_visible(self.label1.get_visible() and needs_lower)
+            self.tick2line.set_visible(self.tick2line.get_visible() and needs_upper)
+            self.label2.set_visible(self.label2.get_visible() and needs_upper)
             super().draw(renderer)
 
     def get_view_interval(self):
@@ -81,7 +100,7 @@ class SkewXAxis(maxis.XAxis):
 class SkewSpine(mspines.Spine):
     def _adjust_location(self):
         pts = self._path.vertices
-        if self.spine_type == 'top':
+        if self.spine_type == "top":
             pts[:, 0] = self.axes.upper_xlim
         else:
             pts[:, 0] = self.axes.lower_xlim
@@ -93,19 +112,19 @@ class SkewSpine(mspines.Spine):
 class SkewXAxes(Axes):
     """
     Class to handle Skew-X axis used in the SkewT plots.
-    
+
     This class contain all the necessary functions to plot vertical
     soundings with its corresponding parcel analysis.
-        
-    This class derives from the Matplolib's Axes_ class. 
-    
-    For axis initialization the following keywords are supported to control the 
+
+    This class derives from the Matplolib's Axes_ class.
+
+    For axis initialization the following keywords are supported to control the
     SkewT diagram properties:
-    
-    
+
+
     .. _Axes: https://matplotlib.org/api/axes_api.html#matplotlib.axes.Axes
-    
-    
+
+
     Parameters
     ----------
     pmin : float, optional
@@ -116,21 +135,21 @@ class SkewXAxes(Axes):
         skew X axis maximum temperature in Celsius
     tmin : float, optional
     skew X axis minimum temperature in Celsius
-    
+
     Other Parameters
     ----------------
-        
+
     kwargs : extra keywords arguments , optional
         See Axes_ class initialization parameters for more information on the the supported keywords
         The xscale and yscale has keywords have no effect.
-    
-    
+
+
     """
 
     # The projection must specify a name.  This will be used be the
     # user to select the projection, i.e.
     # ``subplot(111, projection='skewx')``.
-    name = 'skewx'
+    name = "skewx"
 
     def _init_axis(self):
         # Taken from Axes and modified to use our modified X-axis
@@ -142,10 +161,12 @@ class SkewXAxes(Axes):
         self.spines["right"].register_axis(self.yaxis)
 
     def _gen_axes_spines(self):
-        spines = {'top': SkewSpine.linear_spine(self, 'top'),
-                  'bottom': mspines.Spine.linear_spine(self, 'bottom'),
-                  'left': mspines.Spine.linear_spine(self, 'left'),
-                  'right': mspines.Spine.linear_spine(self, 'right')}
+        spines = {
+            "top": SkewSpine.linear_spine(self, "top"),
+            "bottom": mspines.Spine.linear_spine(self, "bottom"),
+            "left": mspines.Spine.linear_spine(self, "left"),
+            "right": mspines.Spine.linear_spine(self, "right"),
+        }
         return spines
 
     def _set_lim_and_transforms(self):
@@ -164,9 +185,7 @@ class SkewXAxes(Axes):
         # We keep the pre-transAxes transform around for other users, like the
         # spines for finding bounds
         self.transDataToAxes = (
-                self.transScale
-                + self.transLimits
-                + transforms.Affine2D().skew_deg(rot, 0)
+            self.transScale + self.transLimits + transforms.Affine2D().skew_deg(rot, 0)
         )
         # Create the full transform from Data to Pixels
         self.transData = self.transDataToAxes + self.transAxes
@@ -174,11 +193,11 @@ class SkewXAxes(Axes):
         # Blended transforms like this need to have the skewing applied using
         # both axes, in axes coords like before.
         self._xaxis_transform = (
-                transforms.blended_transform_factory(
-                    self.transScale + self.transLimits,
-                    transforms.IdentityTransform())
-                + transforms.Affine2D().skew_deg(rot, 0)
-                + self.transAxes
+            transforms.blended_transform_factory(
+                self.transScale + self.transLimits, transforms.IdentityTransform()
+            )
+            + transforms.Affine2D().skew_deg(rot, 0)
+            + self.transAxes
         )
 
     @property
@@ -187,20 +206,20 @@ class SkewXAxes(Axes):
 
     @property
     def upper_xlim(self):
-        pts = [[0., 1.], [1., 1.]]
+        pts = [[0.0, 1.0], [1.0, 1.0]]
         return self.transDataToAxes.inverted().transform(pts)[:, 0]
 
     def __init__(self, *args, **kwargs):
         """ New constructor """
 
-        pmin = kwargs.pop('pmin', 100)
-        pmax = kwargs.pop('pmax', 1050)
-        tmax = kwargs.pop('tmax', 50)
-        tmin = kwargs.pop('tmin', -30)
-        _ = kwargs.pop('yscale', None)
-        _ = kwargs.pop('xscale', None)
+        pmin = kwargs.pop("pmin", 100)
+        pmax = kwargs.pop("pmax", 1050)
+        tmax = kwargs.pop("tmax", 50)
+        tmin = kwargs.pop("tmin", -30)
+        _ = kwargs.pop("yscale", None)
+        _ = kwargs.pop("xscale", None)
 
-        super().__init__(yscale='log', xscale='linear', *args, **kwargs)
+        super().__init__(yscale="log", xscale="linear", *args, **kwargs)
 
         self.setLimits(tmin=tmin, tmax=tmax, pmin=pmin, pmax=pmax)
 
@@ -212,35 +231,50 @@ class SkewXAxes(Axes):
         self.linesLabels = list()
 
         w = array(
-            [0.00001, 0.0001, 0.0004, 0.001, 0.002, 0.004, 0.007, 0.01, 0.016, 0.024,
-             0.032])
-        self.add_mixratio_isopleths(w, P[P >= 700], color='g', ls='--', alpha=1.,
-                                    lw=0.5)
+            [
+                0.00001,
+                0.0001,
+                0.0004,
+                0.001,
+                0.002,
+                0.004,
+                0.007,
+                0.01,
+                0.016,
+                0.024,
+                0.032,
+            ]
+        )
+        self.add_mixratio_isopleths(
+            w, P[P >= 700], color="g", ls="--", alpha=1.0, lw=0.5
+        )
 
-        self.add_dry_adiabats(linspace(250, 500, 18) - degCtoK, P, color='g', ls='--',
-                              alpha=1., lw=0.5)
+        self.add_dry_adiabats(
+            linspace(250, 500, 18) - degCtoK, P, color="g", ls="--", alpha=1.0, lw=0.5
+        )
 
-        self.add_moist_adiabats(linspace(0, 44, 12), pmax, color='g', ls='--', alpha=1.,
-                                lw=0.5)
+        self.add_moist_adiabats(
+            linspace(0, 44, 12), pmax, color="g", ls="--", alpha=1.0, lw=0.5
+        )
 
         self.set_title("Sounding")
 
     def setLimits(self, tmin=-30, tmax=50, pmin=100, pmax=1000):
         """
         Set the limits of the Skew-T diagram
-        
+
         Parameters
         ----------
-        
+
         tmin : float
             Minimum temperature in celsius (skew x-Axis)
-        
+
         tmax : float
             Maximum temperature in celsius (skew x-Axis)
-            
+
         pmin : float
             Minimum pressure in hPa (log y-Axis)
-        
+
         pmax : float
             Maximum pressure in hPa (log y-Axis)
         """
@@ -251,58 +285,64 @@ class SkewXAxes(Axes):
         self.tmax = tmax
 
     # TODO:  Improve unit conversion
-    # Now that is handled in thermodynamics    
-    def addProfile(self,
-                   pressure, temperature, dewPointTemperature,
-                   hPa=True, celsius=True, method=0,
-                   initialLevel=0,
-                   parcel=True,
-                   label=None,
-                   diagnostics=False,
-                   markers=True,
-                   useVirtual=True,
-                   **kwargs):
+    # Now that is handled in thermodynamics
+    def addProfile(
+        self,
+        pressure,
+        temperature,
+        dewPointTemperature,
+        hPa=True,
+        celsius=True,
+        method=0,
+        initialLevel=0,
+        parcel=True,
+        label=None,
+        diagnostics=False,
+        markers=True,
+        useVirtual=True,
+        **kwargs
+    ):
         """
         Add a profile to the Skew-T axis
-        
+
         .. _`matplotlib.legend`: http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.legend
-        
+
         .. _ndarray: https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html
-        
+
         .. _MaskedArray: https://docs.scipy.org/doc/numpy/reference/maskedarray.html
-        
+
         The input data can  be ndarray_ or MaskedArray_.
-        If MaskedArray_ are used, the pressure levels with masked or invalid entries 
-        in the pressure and temperature arrays are removed. 
+        If MaskedArray_ are used, the pressure levels with masked or invalid entries
+        in the pressure and temperature arrays are removed.
         Masked values in the dewPointTemperature are not plotted.
-        
+
         Parameters
         ----------
-        
+
         pressure : ndarray_ or MaskedArray_
             Pressure levels of the sounding
-        
+
         temperature : ndarray_ or MaskedArray_
             Temperature profile at pressure levels
-        
+
         dewPointTemperature : : ndarray_ or MaskedArray_
             Dew point temperature at pressure levels
-        
-        
+
+
         hPa: bool, optional
             If is True, the pressure levels are in hPa. Otherwise Pascals is
             assumed
-            
+
         celsius : bool, optional
             If is True, the temperatures units correspond to celsius degrees.
             Otherwise Kelvin degrees units are assumed
-            
+
         parcel : bool, optional
             If True, the parcel analysis is carried out.
-            
+
         method : int, optional
             Parcel analysis method used. Supported:
-        
+
             * Most Unstable  : method=0
             * Single Parcel: method=1
             * Mixed Layer  : method=2 (Not supported yet)
@@ -310,10 +350,10 @@ class SkewXAxes(Axes):
         initialLevel : int, optional
             Initial level (index) used to compute the parcel analysis.
             Levels below this value are ignored.
-            
+
             For the Single Parcel analysis, this level correspond to the parcel used.
             By default, the initial level is 0 (surface).
-            
+
             For the Most Unstable method, this value is ignored.
         label : str, optional
             Label assigned to the profile lines. If None, no label is used.
@@ -322,23 +362,23 @@ class SkewXAxes(Axes):
         diagnostics : bool, optional
             If True a text box is added to the upper right corner with some diagnostics
             from the parcel analysis.
-        
+
         markers: bool, optional
             If True, the LCL, LFC and EL are marked in the plot with markers.
-            
+
         useVirtual : bool, optional
             If True, in the parcel analysis, CAPE and CIN are computed used
             the virtual temperature. The temperatures plotted in the SkewT diagram
-            will correspond to virtual temperature instead of temperature. 
+            will correspond to virtual temperature instead of temperature.
             If False, virtual temperatures corrections are neglected and the
             original temperature is plotted.
-            
+
         Other Parameters
         ----------------
-        
+
         loc : str
             Legend location. See `matplotlib.legend`_ for more details.
-            
+
         kwargs : extra
             The remaining extra keyword arguments are passed to the plot function
             when plotting the temperature profiles.
@@ -355,8 +395,9 @@ class SkewXAxes(Axes):
         if isinstance(dewPointTemperature, masked_array):
             dewPointMask = getmaskarray(dewPointTemperature)
             dewPointTemperature.data[dewPointMask] = numpy.nan
-            dewPointTemperature = numpy.asarray(dewPointTemperature.data,
-                                                dtype=numpy.float32)
+            dewPointTemperature = numpy.asarray(
+                dewPointTemperature.data, dtype=numpy.float32
+            )
 
         pressure = masked_invalid(pressure[~mask])
         temperature = masked_invalid(temperature[~mask])
@@ -372,87 +413,113 @@ class SkewXAxes(Axes):
 
         if parcel:
 
-            parcelAnalysisResult = parcelAnalysis(pressure,
-                                                  temperature,
-                                                  dewPointTemperature,
-                                                  hPa=True,
-                                                  celsius=True,
-                                                  useVirtual=1,
-                                                  initialLevel=initialLevel,
-                                                  method=method)
+            parcelAnalysisResult = parcelAnalysis(
+                pressure,
+                temperature,
+                dewPointTemperature,
+                hPa=True,
+                celsius=True,
+                useVirtual=1,
+                initialLevel=initialLevel,
+                method=method,
+            )
 
-            initialLevel = parcelAnalysisResult['initialLevel']
+            initialLevel = parcelAnalysisResult["initialLevel"]
             initialTemperature = temperature[initialLevel]
 
-            pressureAtLCL = parcelAnalysisResult['pressureAtLCL']
-            temperatureAtLCL = parcelAnalysisResult['temperatureAtLCL']
+            pressureAtLCL = parcelAnalysisResult["pressureAtLCL"]
+            temperatureAtLCL = parcelAnalysisResult["temperatureAtLCL"]
 
-            pressureAtLFC = parcelAnalysisResult['pressureAtLFC']
-            temperatureAtLFC = parcelAnalysisResult['temperatureAtLFC']
+            pressureAtLFC = parcelAnalysisResult["pressureAtLFC"]
+            temperatureAtLFC = parcelAnalysisResult["temperatureAtLFC"]
 
-            pressureAtEL = parcelAnalysisResult['pressureAtEL']
-            temperatureAtEL = parcelAnalysisResult['temperatureAtEL']
+            pressureAtEL = parcelAnalysisResult["pressureAtEL"]
+            temperatureAtEL = parcelAnalysisResult["temperatureAtEL"]
 
-            parcelTemperature = liftParcel(initialTemperature, pressure,
-                                           pressureAtLCL, initialLevel=initialLevel,
-                                           hPa=True, celsius=True)
+            parcelTemperature = liftParcel(
+                initialTemperature,
+                pressure,
+                pressureAtLCL,
+                initialLevel=initialLevel,
+                hPa=True,
+                celsius=True,
+            )
 
             # Add LCL
             belowLCL = numpy.where(pressure > pressureAtLCL, True, False)
-            newParcelTemperature = numpy.concatenate((parcelTemperature[belowLCL],
-                                                      [temperatureAtLCL],
-                                                      parcelTemperature[~belowLCL]))
+            newParcelTemperature = numpy.concatenate(
+                (
+                    parcelTemperature[belowLCL],
+                    [temperatureAtLCL],
+                    parcelTemperature[~belowLCL],
+                )
+            )
             newPressure = numpy.concatenate(
-                (pressure[belowLCL], [pressureAtLCL], pressure[~belowLCL]))
+                (pressure[belowLCL], [pressureAtLCL], pressure[~belowLCL])
+            )
 
             # Add EL
             belowEL = numpy.where(newPressure > pressureAtEL, True, False)
-            newParcelTemperature = numpy.concatenate((newParcelTemperature[belowEL],
-                                                      [temperatureAtEL],
-                                                      newParcelTemperature[~belowEL]))
+            newParcelTemperature = numpy.concatenate(
+                (
+                    newParcelTemperature[belowEL],
+                    [temperatureAtEL],
+                    newParcelTemperature[~belowEL],
+                )
+            )
             newPressure = numpy.concatenate(
-                (newPressure[belowEL], [pressureAtEL], newPressure[~belowEL]))
+                (newPressure[belowEL], [pressureAtEL], newPressure[~belowEL])
+            )
 
             belowLFC = numpy.where(newPressure > pressureAtLFC, True, False)
-            newParcelTemperature = numpy.concatenate((newParcelTemperature[belowLFC],
-                                                      [temperatureAtLFC],
-                                                      newParcelTemperature[~belowLFC]))
+            newParcelTemperature = numpy.concatenate(
+                (
+                    newParcelTemperature[belowLFC],
+                    [temperatureAtLFC],
+                    newParcelTemperature[~belowLFC],
+                )
+            )
             newPressure = numpy.concatenate(
-                (newPressure[belowLFC], [pressureAtLFC], newPressure[~belowLFC]))
+                (newPressure[belowLFC], [pressureAtLFC], newPressure[~belowLFC])
+            )
 
-            newTemperature = numpy.interp(newPressure, pressure[::-1],
-                                          temperature[::-1])
+            newTemperature = numpy.interp(
+                newPressure, pressure[::-1], temperature[::-1]
+            )
             newParcelTemperature = masked_invalid(newParcelTemperature)
             if useVirtual:
-                newDewPointTemperature = numpy.interp(newPressure, pressure[::-1],
-                                                      dewPointTemperature[::-1])
-                newTemperature = virtualTemp3(newTemperature, newDewPointTemperature,
-                                              newPressure * 100)
+                newDewPointTemperature = numpy.interp(
+                    newPressure, pressure[::-1], dewPointTemperature[::-1]
+                )
+                newTemperature = virtualTemp3(
+                    newTemperature, newDewPointTemperature, newPressure * 100
+                )
 
-                belowLCL = (newPressure >= pressureAtLCL)
+                belowLCL = newPressure >= pressureAtLCL
 
                 newParcelTemperature[belowLCL] = virtualTemp3(
                     newParcelTemperature[belowLCL],
                     dewPointTemperature[initialLevel],
-                    newPressure[belowLCL] * 100)
-                aboveLCL = (newPressure < pressureAtLCL)
+                    newPressure[belowLCL] * 100,
+                )
+                aboveLCL = newPressure < pressureAtLCL
 
                 newParcelTemperature[aboveLCL] = virtualTemp4(
-                    newParcelTemperature[aboveLCL],
-                    newPressure[aboveLCL] * 100)
+                    newParcelTemperature[aboveLCL], newPressure[aboveLCL] * 100
+                )
 
         else:
             newTemperature = temperature
             newPressure = pressure
 
-        kwargs['zorder'] = kwargs.pop('zorder', 5)
-        kwargs['linewidth'] = kwargs.pop('linewidth', 2.0)
-        kwargs['linestyle'] = kwargs.pop('linestyle', '-')
-        loc = kwargs.pop('loc', 'best')
+        kwargs["zorder"] = kwargs.pop("zorder", 5)
+        kwargs["linewidth"] = kwargs.pop("linewidth", 2.0)
+        kwargs["linestyle"] = kwargs.pop("linestyle", "-")
+        loc = kwargs.pop("loc", "best")
 
-        temperatureLine, = self.plot(newTemperature, newPressure, 'r', **kwargs)
+        (temperatureLine,) = self.plot(newTemperature, newPressure, "r", **kwargs)
 
-        self.plot(dewPointTemperature, pressure, 'b', **kwargs)
+        self.plot(dewPointTemperature, pressure, "b", **kwargs)
 
         if label is not None:
             self.linesHandlers.append(temperatureLine)
@@ -460,41 +527,53 @@ class SkewXAxes(Axes):
             self.legend(self.linesHandlers, self.linesLabels, loc=loc)
 
         if parcel:
-            self.plot(newParcelTemperature, newPressure, 'k', **kwargs)
+            self.plot(newParcelTemperature, newPressure, "k", **kwargs)
 
-            if parcelAnalysisResult['CAPE'] > 0:
-                # Positive Buoyancy 
+            if parcelAnalysisResult["CAPE"] > 0:
+                # Positive Buoyancy
                 cond1 = (newPressure <= pressureAtLFC) * (newPressure >= pressureAtEL)
 
-                self.fill_betweenx(newPressure, newParcelTemperature, newTemperature,
-                                   where=cond1, \
-                                   color="#ff0009", alpha=0.4, zorder=10)
+                self.fill_betweenx(
+                    newPressure,
+                    newParcelTemperature,
+                    newTemperature,
+                    where=cond1,
+                    color="#ff0009",
+                    alpha=0.4,
+                    zorder=10,
+                )
 
-                # Negative Buoyancy  
+                # Negative Buoyancy
 
                 validMask = ~getmaskarray(masked_invalid(newParcelTemperature))
 
-                cond2 = ((newParcelTemperature[validMask] <= newTemperature[
-                    validMask]) *
-                         (newPressure[validMask] >= pressureAtLFC))
+                cond2 = (
+                    newParcelTemperature[validMask] <= newTemperature[validMask]
+                ) * (newPressure[validMask] >= pressureAtLFC)
 
-                self.fill_betweenx(newPressure[validMask],
-                                   newParcelTemperature[validMask],
-                                   newTemperature[validMask], where=cond2, \
-                                   color="#045cff", alpha=0.4, zorder=10)
+                self.fill_betweenx(
+                    newPressure[validMask],
+                    newParcelTemperature[validMask],
+                    newTemperature[validMask],
+                    where=cond2,
+                    color="#045cff",
+                    alpha=0.4,
+                    zorder=10,
+                )
 
             if markers:
                 if useVirtual:
-                    temperatureAtLCL = virtualTemp4(temperatureAtLCL,
-                                                    pressureAtLCL * 100)
-                    temperatureAtLFC = virtualTemp4(temperatureAtLFC,
-                                                    pressureAtLFC * 100)
-                    temperatureAtEL = virtualTemp4(temperatureAtEL,
-                                                   pressureAtEL * 100)
+                    temperatureAtLCL = virtualTemp4(
+                        temperatureAtLCL, pressureAtLCL * 100
+                    )
+                    temperatureAtLFC = virtualTemp4(
+                        temperatureAtLFC, pressureAtLFC * 100
+                    )
+                    temperatureAtEL = virtualTemp4(temperatureAtEL, pressureAtEL * 100)
 
-                self.plot(temperatureAtLCL, pressureAtLCL, ls='', marker='o', color='r')
-                self.plot(temperatureAtLFC, pressureAtLFC, ls='', marker='o', color='g')
-                self.plot(temperatureAtEL, pressureAtEL, ls='', marker='o', color='k')
+                self.plot(temperatureAtLCL, pressureAtLCL, ls="", marker="o", color="r")
+                self.plot(temperatureAtLFC, pressureAtLFC, ls="", marker="o", color="g")
+                self.plot(temperatureAtEL, pressureAtEL, ls="", marker="o", color="k")
 
             if diagnostics:
                 # Add text to sounding
@@ -506,40 +585,46 @@ class SkewXAxes(Axes):
                 # dtext+="Td :  %4.1fC\n"%startdp
                 dtext += "-------------\n"
                 dtext += "P_par:%6.1fhPa\n" % (pressure[initialLevel])
-                dtext += "P_LCL:%6.1fhPa\n" % (parcelAnalysisResult['pressureAtLCL'])
-                dtext += "T_LCL:%4.1fC\n" % (parcelAnalysisResult['temperatureAtLCL'])
-                dtext += "P_LFC:%6.1fhPa\n" % (parcelAnalysisResult['pressureAtLFC'])
-                dtext += "T_LFC:%4.1fC\n" % (parcelAnalysisResult['temperatureAtLFC'])
-                dtext += "P_EL:%6.1fhPa\n" % (parcelAnalysisResult['pressureAtEL'])
-                dtext += "T_EL:%4.1fC\n" % (parcelAnalysisResult['temperatureAtEL'])
-                dtext += "CAPE:%.1f\n" % parcelAnalysisResult['CAPE']
-                dtext += "CIN: %.1fJ" % parcelAnalysisResult['CIN']
+                dtext += "P_LCL:%6.1fhPa\n" % (parcelAnalysisResult["pressureAtLCL"])
+                dtext += "T_LCL:%4.1fC\n" % (parcelAnalysisResult["temperatureAtLCL"])
+                dtext += "P_LFC:%6.1fhPa\n" % (parcelAnalysisResult["pressureAtLFC"])
+                dtext += "T_LFC:%4.1fC\n" % (parcelAnalysisResult["temperatureAtLFC"])
+                dtext += "P_EL:%6.1fhPa\n" % (parcelAnalysisResult["pressureAtEL"])
+                dtext += "T_EL:%4.1fC\n" % (parcelAnalysisResult["temperatureAtEL"])
+                dtext += "CAPE:%.1f\n" % parcelAnalysisResult["CAPE"]
+                dtext += "CIN: %.1fJ" % parcelAnalysisResult["CIN"]
 
                 axesBox = self.get_position().get_points()
 
-                self.figure.text(axesBox[1, 0], axesBox[1, 1], dtext,
-                                 fontname="monospace", backgroundcolor='white',
-                                 zorder=10,
-                                 verticalalignment='top', horizontalalignment='right',
-                                 multialignment="left")
+                self.figure.text(
+                    axesBox[1, 0],
+                    axesBox[1, 1],
+                    dtext,
+                    fontname="monospace",
+                    backgroundcolor="white",
+                    zorder=10,
+                    verticalalignment="top",
+                    horizontalalignment="right",
+                    multialignment="left",
+                )
 
     def other_housekeeping(self, mixratio=array([])):
         """
         Set the Skew-T diagram properties:
-        
+
         * y axis grid
         * x and y axis ticks
         * x axis label
         * x and y axis limits (see :py:meth:setLimits)
         """
 
-        self.yaxis.grid(True, ls='-', color='y', lw=0.5)
+        self.yaxis.grid(True, ls="-", color="y", lw=0.5)
         majorLocatorDegC = MultipleLocator(10)
 
-        self.xaxis.grid(True, color='y', lw=0.5, ls='-')
+        self.xaxis.grid(True, color="y", lw=0.5, ls="-")
 
         # self.set_ylabel('Pressure (hPa)')
-        self.set_xlabel('Temperature (C)')
+        self.set_xlabel("Temperature (C)")
         yticks = linspace(100, 1000, 10)
         if self.pmin < 100:
             yticks = concatenate((array([50, 20, 10]), yticks))
@@ -563,7 +648,7 @@ class SkewXAxes(Axes):
         """ Add the dry adiabats to the Axis"""
         # Taken from Thomas Chubb's add_dry_adiabats method
 
-        P0 = 1000.
+        P0 = 1000.0
         T = array([(st + degCtoK) * (P / P0) ** (Rs_da / Cp_da) - degCtoK for st in T0])
         labelt = [(st + degCtoK) * 1 ** (Rs_da / Cp_da) for st in T0]
 
@@ -579,18 +664,28 @@ class SkewXAxes(Axes):
         tminl = self.tmin - tran * ndec
         tmaxl = self.tmax - tran * ndec
 
-        if 'color' in kwargs:
-            col = kwargs['color']
+        if "color" in kwargs:
+            col = kwargs["color"]
         else:
-            col = 'k'
+            col = "k"
         for tt, ll in zip(T, labelt):
             self.plot(tt, P, **kwargs)
             if do_labels:
-                if tt[xi] > tmaxl - 2: continue
-                if tt[xi] < tminl + 2: continue
-                self.text(tt[xi], P[xi] + 10, '%d' % (ll), fontsize=8, \
-                          ha='center', va='bottom', rotation=-30, color=col, \
-                          bbox={'facecolor': 'w', 'edgecolor': 'w'})
+                if tt[xi] > tmaxl - 2:
+                    continue
+                if tt[xi] < tminl + 2:
+                    continue
+                self.text(
+                    tt[xi],
+                    P[xi] + 10,
+                    "%d" % (ll),
+                    fontsize=8,
+                    ha="center",
+                    va="bottom",
+                    rotation=-30,
+                    color=col,
+                    bbox={"facecolor": "w", "edgecolor": "w"},
+                )
         return T
 
     def add_moist_adiabats(self, T0, P0, do_labels=True, nsteps=500, **kwargs):
@@ -606,7 +701,7 @@ class SkewXAxes(Axes):
             P, T[index, :] = moistAscent(P0, temp, celsius=True, hPa=True)
 
         # gets a pressure level about 3/4 the way up the plot...
-        pp = 10 ** (log10(self.pmin ** .75 * self.pmax ** .25))
+        pp = 10 ** (log10(self.pmin ** 0.75 * self.pmax ** 0.25))
         xi = where(abs(P - pp) - abs(P - pp).min() < 1e-6)[0][0]
 
         ndec = log10(self.pmax / pp) / log10(self.pmax / self.pmin)
@@ -614,10 +709,10 @@ class SkewXAxes(Axes):
         tminl = self.tmin - tran * ndec
         tmaxl = self.tmax - tran * ndec
 
-        if 'color' in kwargs:
-            col = kwargs['color']
+        if "color" in kwargs:
+            col = kwargs["color"]
         else:
-            col = 'k'
+            col = "k"
 
         for index in range(len(T0)):
             tt = T[index, :]
@@ -625,26 +720,34 @@ class SkewXAxes(Axes):
 
             # if (tt[-1]>-60) and (tt[-1]<-10):
             if do_labels:
-                if tt[xi] > tmaxl - 2: continue
-                if tt[xi] < tminl + 2: continue
-                self.text(tt[xi], P[xi], '%d' % (tt[0] + degCtoK), ha='center',
-                          va='bottom', \
-                          fontsize=8, bbox={'facecolor': 'w', 'edgecolor': 'w'},
-                          color=col)
+                if tt[xi] > tmaxl - 2:
+                    continue
+                if tt[xi] < tminl + 2:
+                    continue
+                self.text(
+                    tt[xi],
+                    P[xi],
+                    "%d" % (tt[0] + degCtoK),
+                    ha="center",
+                    va="bottom",
+                    fontsize=8,
+                    bbox={"facecolor": "w", "edgecolor": "w"},
+                    color=col,
+                )
 
     def add_mixratio_isopleths(self, w, P, do_labels=True, **kwargs):
         """ Add the vapor mixing ration isopleths to the Axis"""
         # Taken from Thomas Chubb's add_dry_adiabats method
 
         if len(P) > 0:
-            e = array([P * ww / (.622 + ww) for ww in w])
+            e = array([P * ww / (0.622 + ww) for ww in w])
             T = 243.5 / (17.67 / log(e / 6.112) - 1)
-            if 'color' in kwargs:
-                col = kwargs['color']
+            if "color" in kwargs:
+                col = kwargs["color"]
             else:
-                col = 'k'
+                col = "k"
 
-            pp = 700.
+            pp = 700.0
             xi = where(abs(P - pp) - abs(P - pp).min() < 1e-6)[0][0]
 
             ndec = log10(self.pmax / pp) / log10(self.pmax / self.pmin)
@@ -655,17 +758,26 @@ class SkewXAxes(Axes):
             for tt, mr in zip(T, w):
                 self.plot(tt, P.flatten(), **kwargs)
                 if do_labels:
-                    if tt[xi] > tmaxl - 2: continue
-                    if tt[xi] < tminl + 2: continue
+                    if tt[xi] > tmaxl - 2:
+                        continue
+                    if tt[xi] < tminl + 2:
+                        continue
                     if mr * 1000 < 0.1:
                         fmt = "%4.2f"
-                    elif mr * 1000 <= 1.:
+                    elif mr * 1000 <= 1.0:
                         fmt = "%4.1f"
                     else:
                         fmt = "%d"
-                    self.text(tt[-1], P[-1], fmt % (mr * 1000), \
-                              color=col, fontsize=8, ha='center', va='bottom', \
-                              bbox={'facecolor': 'w', 'edgecolor': 'w'})
+                    self.text(
+                        tt[-1],
+                        P[-1],
+                        fmt % (mr * 1000),
+                        color=col,
+                        fontsize=8,
+                        ha="center",
+                        va="bottom",
+                        bbox={"facecolor": "w", "edgecolor": "w"},
+                    )
 
 
 # Now register the projection with matplotlib so the user can select it.
