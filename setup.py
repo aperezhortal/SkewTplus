@@ -4,9 +4,8 @@ Setup
 from __future__ import division, absolute_import, print_function
 
 __author__ = "Andres Perez Hortal"
-__copyright__ = "Copyright (c) 2017, Andres A. Perez Hortal, McGill University"
+__copyright__ = "Copyright (c) 2017, Andres A. Perez Hortal"
 __license__ = "BSD-3-Clause License, see LICENCE.txt for more details"
-__email__ = "andresperezcba@gmail.com"
 
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
@@ -48,9 +47,8 @@ build_requires = ['matplotlib', 'numpy', 'netCDF4', 'requests', 'six']
 
 setup(
     name='SkewTplus',
-    version='1.1.2',
+    version='1.1.3',
     author="Andres Perez Hortal",
-    author_email="andresperezcba@gmail.com",
     packages=find_packages(),
     ext_modules=externalModules,
     url='http://pypi.python.org/pypi/SkewTplus/',
@@ -62,8 +60,6 @@ setup(
         'Topic :: Scientific/Engineering',
         'Topic :: Scientific/Engineering :: Atmospheric Science',
         'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Cython'],
