@@ -4,69 +4,67 @@ Setup
 from __future__ import division, absolute_import, print_function
 
 __author__ = "Andres Perez Hortal"
-__copyright__ = "Copyright (c) 2017, Andres A. Perez Hortal, McGill University"
+__copyright__ = "Copyright (c) 2017, Andres A. Perez Hortal"
 __license__ = "BSD-3-Clause License, see LICENCE.txt for more details"
-__email__ = "andresperezcba@gmail.com"
 
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
 
 try:
-    import numpy
+    from Cython.Build import cythonize
 except ImportError:
-    raise RuntimeError("Numpy required to pior running the package installation\n" +
-                       "Try installing it with:\n" +
-                       "$> pip install numpy")
+    raise RuntimeError(
+        "Cython required for running the package installation\n"
+        + "Try installing it with:\n"
+        + "$> pip install cython"
+    )
 
 try:
-    from Cython.Build.Dependencies import cythonize
-
-    CythonPresent = True
+    import numpy
 except ImportError:
-    CythonPresent = False
+    raise RuntimeError(
+        "Numpy required for running the package installation\n"
+        + "Try installing it with:\n"
+        + "$> pip install numpy"
+    )
 
-_thermodynamics_ExtensionArguments = dict(extra_compile_args=['-fopenmp'],
-                                          extra_link_args=['-fopenmp'],
-                                          include_dirs=[numpy.get_include()],
-                                          language='c++'
-                                          )
-if CythonPresent:
+_thermodynamics_ExtensionArguments = dict(
+    extra_compile_args=["-fopenmp"],
+    extra_link_args=["-fopenmp"],
+    include_dirs=[numpy.get_include()],
+    language="c++",
+)
 
-    thermodynamicsLibExtension = Extension("SkewTplus._thermodynamics",
-                                           sources=['SkewTplus/_thermodynamics.pyx'],
-                                           **_thermodynamics_ExtensionArguments)
+thermodynamicsLibExtension = Extension(
+    "SkewTplus._thermodynamics",
+    sources=["SkewTplus/_thermodynamics.pyx"],
+    **_thermodynamics_ExtensionArguments
+)
 
-    externalModules = cythonize([thermodynamicsLibExtension])
-else:
-    thermodynamicsLibExtension = Extension("SkewTplus._thermodynamics",
-                                           sources=['SkewTplus/_thermodynamics.cpp'],
-                                           **_thermodynamics_ExtensionArguments)
+externalModules = cythonize([thermodynamicsLibExtension])
 
-    externalModules = [thermodynamicsLibExtension]
-
-build_requires = ['matplotlib', 'numpy', 'netCDF4', 'requests', 'six']
+build_requires = ["matplotlib>=3.1", "cython", "numpy", "netCDF4", "requests", "six"]
 
 setup(
-    name='SkewTplus',
-    version='1.1.2',
+    name="SkewTplus",
+    version="1.1.3",
     author="Andres Perez Hortal",
-    author_email="andresperezcba@gmail.com",
     packages=find_packages(),
     ext_modules=externalModules,
-    url='http://pypi.python.org/pypi/SkewTplus/',
-    license='LICENSE.txt',
-    description='Atmospheric Profile Plotting and Diagnostics',
-    long_description=open('README.rst').read(),
+    url="http://pypi.python.org/pypi/SkewTplus/",
+    license="LICENSE.txt",
+    description="Atmospheric Profile Plotting and Diagnostics",
+    long_description=open("README.rst").read(),
     classifiers=[
-        'Development Status :: 5 - Production/Stable', 'Intended Audience :: Science/Research',
-        'Topic :: Scientific/Engineering',
-        'Topic :: Scientific/Engineering :: Atmospheric Science',
-        'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Cython'],
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Atmospheric Science",
+        "License :: OSI Approved :: BSD License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Cython",
+    ],
     setup_requires=build_requires,
-    install_requires=build_requires
+    install_requires=build_requires,
 )
