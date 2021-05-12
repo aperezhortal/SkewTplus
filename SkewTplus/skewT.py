@@ -185,7 +185,8 @@ class SkewXAxes(Axes):
         # We keep the pre-transAxes transform around for other users, like the
         # spines for finding bounds
         self.transDataToAxes = (
-            self.transScale + self.transLimits + transforms.Affine2D().skew_deg(rot, 0)
+                self.transScale + self.transLimits + transforms.Affine2D().skew_deg(rot,
+                                                                                    0)
         )
         # Create the full transform from Data to Pixels
         self.transData = self.transDataToAxes + self.transAxes
@@ -193,11 +194,11 @@ class SkewXAxes(Axes):
         # Blended transforms like this need to have the skewing applied using
         # both axes, in axes coords like before.
         self._xaxis_transform = (
-            transforms.blended_transform_factory(
-                self.transScale + self.transLimits, transforms.IdentityTransform()
-            )
-            + transforms.Affine2D().skew_deg(rot, 0)
-            + self.transAxes
+                transforms.blended_transform_factory(
+                    self.transScale + self.transLimits, transforms.IdentityTransform()
+                )
+                + transforms.Affine2D().skew_deg(rot, 0)
+                + self.transAxes
         )
 
     @property
@@ -287,20 +288,20 @@ class SkewXAxes(Axes):
     # TODO:  Improve unit conversion
     # Now that is handled in thermodynamics
     def addProfile(
-        self,
-        pressure,
-        temperature,
-        dewPointTemperature,
-        hPa=True,
-        celsius=True,
-        method=0,
-        initialLevel=0,
-        parcel=True,
-        label=None,
-        diagnostics=False,
-        markers=True,
-        useVirtual=True,
-        **kwargs
+            self,
+            pressure,
+            temperature,
+            dewPointTemperature,
+            hPa=True,
+            celsius=True,
+            method=0,
+            initialLevel=0,
+            parcel=True,
+            label=None,
+            diagnostics=False,
+            markers=True,
+            useVirtual=True,
+            **kwargs
     ):
         """
         Add a profile to the Skew-T axis
@@ -318,35 +319,26 @@ class SkewXAxes(Axes):
 
         Parameters
         ----------
-
         pressure : ndarray_ or MaskedArray_
             Pressure levels of the sounding
-
         temperature : ndarray_ or MaskedArray_
             Temperature profile at pressure levels
-
         dewPointTemperature : : ndarray_ or MaskedArray_
             Dew point temperature at pressure levels
-
-
         hPa: bool, optional
             If is True, the pressure levels are in hPa. Otherwise Pascals is
             assumed
-
         celsius : bool, optional
             If is True, the temperatures units correspond to celsius degrees.
             Otherwise Kelvin degrees units are assumed
-
         parcel : bool, optional
             If True, the parcel analysis is carried out.
-
         method : int, optional
             Parcel analysis method used. Supported:
 
             * Most Unstable  : method=0
             * Single Parcel: method=1
-            * Mixed Layer  : method=2 (Not supported yet)
-
+            * Mixed Layer  : method=2 (Not implemented)
         initialLevel : int, optional
             Initial level (index) used to compute the parcel analysis.
             Levels below this value are ignored.
@@ -362,23 +354,24 @@ class SkewXAxes(Axes):
         diagnostics : bool, optional
             If True a text box is added to the upper right corner with some diagnostics
             from the parcel analysis.
-
         markers: bool, optional
             If True, the LCL, LFC and EL are marked in the plot with markers.
-
         useVirtual : bool, optional
             If True, in the parcel analysis, CAPE and CIN are computed used
             the virtual temperature. The temperatures plotted in the SkewT diagram
             will correspond to virtual temperature instead of temperature.
             If False, virtual temperatures corrections are neglected and the
             original temperature is plotted.
-
+        twColor: str
+            Color for the dew point temperature line.
+        tdColor: str
+            Color for the dry temperature line.
+        tpColor: str
+            Color for the parcel temperature line.
         Other Parameters
         ----------------
-
         loc : str
             Legend location. See `matplotlib.legend`_ for more details.
-
         kwargs : extra
             The remaining extra keyword arguments are passed to the plot function
             when plotting the temperature profiles.
@@ -516,10 +509,13 @@ class SkewXAxes(Axes):
         kwargs["linewidth"] = kwargs.pop("linewidth", 2.0)
         kwargs["linestyle"] = kwargs.pop("linestyle", "-")
         loc = kwargs.pop("loc", "best")
+        twColor = kwargs.pop("twColor", "b")
+        tdColor = kwargs.pop("tdColor", "r")
+        tpColor = kwargs.pop("tpColor", "k")
 
-        (temperatureLine,) = self.plot(newTemperature, newPressure, "r", **kwargs)
+        (temperatureLine,) = self.plot(newTemperature, newPressure, tdColor, **kwargs)
 
-        self.plot(dewPointTemperature, pressure, "b", **kwargs)
+        self.plot(dewPointTemperature, pressure, twColor, **kwargs)
 
         if label is not None:
             self.linesHandlers.append(temperatureLine)
@@ -527,7 +523,9 @@ class SkewXAxes(Axes):
             self.legend(self.linesHandlers, self.linesLabels, loc=loc)
 
         if parcel:
-            self.plot(newParcelTemperature, newPressure, "k", **kwargs)
+            self.plot(
+                newParcelTemperature, newPressure, tpColor, **kwargs
+            )
 
             if parcelAnalysisResult["CAPE"] > 0:
                 # Positive Buoyancy
@@ -547,9 +545,8 @@ class SkewXAxes(Axes):
 
                 validMask = ~getmaskarray(masked_invalid(newParcelTemperature))
 
-                cond2 = (
-                    newParcelTemperature[validMask] <= newTemperature[validMask]
-                ) * (newPressure[validMask] >= pressureAtLFC)
+                cond2 = (newParcelTemperature[validMask] <= newTemperature[validMask]
+                         ) * (newPressure[validMask] >= pressureAtLFC)
 
                 self.fill_betweenx(
                     newPressure[validMask],
