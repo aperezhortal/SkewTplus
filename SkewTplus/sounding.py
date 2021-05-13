@@ -229,7 +229,7 @@ class sounding(object):
                 self.fetchFromWeb(inputData, stationId)
             else:
 
-                if isinstance(inputData, str):
+                if isinstance(inputData, string_types):
                     # A file path was given
 
                     if not isfile(inputData):
