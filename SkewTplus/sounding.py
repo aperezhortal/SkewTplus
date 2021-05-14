@@ -9,7 +9,6 @@ from html.parser import HTMLParser
 from os.path import isfile
 from tempfile import NamedTemporaryFile
 
-from netCDF4 import Dataset
 from numpy import ndarray
 import numpy
 from numpy.ma.core import (
@@ -489,7 +488,7 @@ class sounding(object):
         """
         Reads the raw profile data from a ARM sounding file (Netcdf file).
         """
-
+        from netCDF4 import Dataset
         armNetcdfFile = Dataset(filePath, mode="r")
         self.setMissingValue(-9999.0)
 
