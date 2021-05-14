@@ -19,11 +19,9 @@ import matplotlib.axis as maxis
 import matplotlib.spines as mspines
 import matplotlib.transforms as transforms
 import numpy
-from contextlib import ExitStack
+from contextlib2 import ExitStack
 from matplotlib import pyplot
 from matplotlib.axes import Axes
-from matplotlib.axes import Axes
-from matplotlib.projections import register_projection
 from matplotlib.projections import register_projection
 from matplotlib.ticker import MultipleLocator, ScalarFormatter
 from numpy import (
@@ -49,6 +47,8 @@ from SkewTplus.thermodynamics import (
     virtualTemp3,
     virtualTemp4,
 )
+
+from builtins import super  as super2  # noqa
 
 
 # The sole purpose of this class is to look at the upper, lower, or total
@@ -78,7 +78,7 @@ class SkewXTick(maxis.XTick):
             self.label1.set_visible(self.label1.get_visible() and needs_lower)
             self.tick2line.set_visible(self.tick2line.get_visible() and needs_upper)
             self.label2.set_visible(self.label2.get_visible() and needs_upper)
-            super().draw(renderer)
+            super2().draw(renderer)
 
     def get_view_interval(self):
         return self.axes.xaxis.get_view_interval()
@@ -88,7 +88,7 @@ class SkewXTick(maxis.XTick):
 # as well as create instances of the custom tick
 class SkewXAxis(maxis.XAxis):
     def _get_tick(self, major):
-        return SkewXTick(self.axes, None, major=major)
+        return SkewXTick(self.axes, None, '', major=major)
 
     def get_view_interval(self):
         return self.axes.upper_xlim[0], self.axes.lower_xlim[1]
@@ -177,7 +177,7 @@ class SkewXAxes(Axes):
         rot = 30
 
         # Get the standard transform setup from the Axes base class
-        super()._set_lim_and_transforms()
+        super2()._set_lim_and_transforms()
 
         # Need to put the skew in the middle, after the scale and limits,
         # but before the transAxes. This way, the skew is done in Axes
@@ -220,7 +220,7 @@ class SkewXAxes(Axes):
         _ = kwargs.pop("yscale", None)
         _ = kwargs.pop("xscale", None)
 
-        super().__init__(yscale="log", xscale="linear", *args, **kwargs)
+        super2().__init__(yscale="log", xscale="linear", *args, **kwargs)
 
         self.setLimits(tmin=tmin, tmax=tmax, pmin=pmin, pmax=pmax)
 

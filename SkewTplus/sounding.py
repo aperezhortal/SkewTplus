@@ -228,7 +228,6 @@ class sounding(object):
             if fileFormat == "web":
                 self.fetchFromWeb(inputData, stationId)
             else:
-
                 if isinstance(inputData, string_types):
                     # A file path was given
 
@@ -239,7 +238,7 @@ class sounding(object):
                         # Try automatic detection of file format
                         try:
                             self.fetchFromARMFile(inputData)
-                        except OSError:
+                        except IOError:
                             # If it is not a NETCDF , try TXT
                             self.fetchFromTxtFile(inputData)
 

@@ -43,7 +43,7 @@ thermodynamicsLibExtension = Extension(
 
 externalModules = cythonize([thermodynamicsLibExtension])
 
-build_requires = ["matplotlib>=3.1", "cython", "numpy", "netCDF4", "requests", "six"]
+build_requires = ["matplotlib", "cython", "numpy", "netCDF4", "requests", "six"]
 
 setup(
     name="SkewTplus",
